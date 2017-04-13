@@ -12,8 +12,8 @@ class SMS_codes(db.Entity):
 class Clients(db.Entity):
     name = Required(str)
     phone = Required(str, unique=True)
-    api_key = Required('keys')
-    orders = Set('orders')
+    api_key = Required('Keys')
+    orders = Set('Orders')
 
 
 class Companies(db.Entity):
@@ -29,8 +29,8 @@ class Companies(db.Entity):
     logo_url = Required(str)
     login = Required(str)
     password = Required(str)
-    workers = Set('workers')
-    api_key = Required('keys')
+    workers = Set('Workers')
+    api_key = Required('Keys')
 
 
 class Workers(db.Entity):
@@ -39,29 +39,29 @@ class Workers(db.Entity):
     patronymic = Required(str)
     date_of_birth = Required(datetime)
     date_of_hire = Required(datetime)
-    status = Required('workers_status')
+    status = Required('Workers_status')
     phone = Required(str)
-    api_key = Required('keys')
-    company = Required(companies)
-    location_history = Set('workers_location_history')
-    last_location = Optional('workers_last_location')
-    orders = Set('orders')
+    api_key = Required('Keys')
+    company = Required(Companies)
+    location_history = Set('Workers_location_history')
+    last_location = Optional('Workers_last_location')
+    orders = Set('Orders')
 
 
 class Workers_status(db.Entity):
     description = Required(str)
-    workers = Set(workers)
+    workers = Set(Workers)
 
 
 class Workers_location_history(db.Entity):
-    worker = Required(workers)
+    worker = Required(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
     time_stramp = Required(datetime)
 
 
 class Workers_last_location(db.Entity):
-    worker = Required(workers)
+    worker = Required(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
 
@@ -69,14 +69,14 @@ class Workers_last_location(db.Entity):
 class Keys(db.Entity):
     key = Required(str)
     role = Required(str)
-    clients = Set(clients)
-    workers = Set(workers)
-    companies = Set(companies)
+    clients = Set(Clients)
+    workers = Set(Workers)
+    companies = Set(Companies)
 
 
 class Orders(db.Entity):
-    client = Required(clients)
-    worker = Required(workers)
+    client = Required(Clients)
+    worker = Required(Workers)
     start_client_lat = Required(Decimal)
     start_client_long = Required(Decimal)
     start_worker_lat = Required(Decimal)
@@ -85,12 +85,12 @@ class Orders(db.Entity):
     termination_time = Optional(datetime)
     final_lat = Optional(Decimal)
     final_long = Optional(Decimal)
-    status = Required('orders_status')
+    status = Required('Orders_status')
 
 
 class Orders_status(db.Entity):
     description = Required(str)
-    orders = Set(orders)
+    orders = Set(Orders)
 
 
 db.bind('postgres', dbname="d3p9qhfg5eam1h", user="ngmdcklcqvatps",
