@@ -24,7 +24,7 @@ def get_code(phone):
     return 404
 
 
-@clients_api.route('/api/clients', methods=['POST'])
+@clients_api.route('/api/clients>', methods=['POST'])
 @db_session
 def sign_up():
     req = request.get_json()
