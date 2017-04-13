@@ -9,7 +9,7 @@ clients_api = Blueprint('clients_api', __name__)
 @clients_api.route('/api/clients/verification/<string:phone>')
 @db_session
 def verificate(phone):
-    if Clients.exsists(lambda c: c.phone == phone):
+    if Clients.exists(lambda c: c.phone == phone):
         return '', 200
     return '', 404
 
