@@ -69,10 +69,15 @@ class Workers_last_location(db.Entity):
 
 class Keys(db.Entity):
     key = Required(str)
-    role = Required(str)
-    clients = Set(Clients)
-    workers = Set(Workers)
-    companies = Set(Companies)
+    role = Required('Roles')
+    client = Optional(Clients)
+    worker = Optional(Workers)
+    company = Optional(Companies)
+
+
+class Roles(db.Entity):
+    name = Required(str)
+    keys = Set(Keys)
 
 
 class Orders(db.Entity):
