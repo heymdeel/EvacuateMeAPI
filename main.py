@@ -7,7 +7,6 @@ app = Flask(__name__)
 
 app.register_blueprint(clients_api)
 
-
 @app.route('/')
 def start():
     return 'Hello, klac-klac'
