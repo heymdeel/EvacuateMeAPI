@@ -3,8 +3,18 @@ from models import *
 from datetime import datetime
 import hashlib
 import random
+import grequests
 
 clients_api = Blueprint('clients_api', __name__)
+
+
+def create_code_response(phone, code):
+    URL = 'http://smsc.ru/sys/send.php?login=Debian17&psw=qwerty12&charset=utf-8'
+    URL += '&phones='
+    URL += phone
+    URL += '&mes=Ваш код активации:'
+    URL += str(code)
+    return URL
 
 
 @clients_api.route('/api/clients/verification/<string:phone>')
@@ -20,6 +30,10 @@ def verificate(phone):
 def get_code(phone):
     code = random.randint(1000, 9999)
     SMS_codes(phone=phone, code=code, time_stramp=datetime.now())
+    r = create_code_response(phone, code)
+    urls = [r]
+    rs = (grequests.post(u) for u in urls)
+    grequests.map(rs)
     return '', 200
 
 
