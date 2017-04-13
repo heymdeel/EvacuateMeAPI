@@ -3,20 +3,20 @@ from datetime import datetime
 
 db = Database()
 
-class sms_codes(db.Entity):
+class SMS_codes(db.Entity):
     phone = Required(str, unique=True)
     code = Required(int)
     time_stramp = Required(datetime)
 
 
-class clients(db.Entity):
+class Clients(db.Entity):
     name = Required(str)
     phone = Required(str, unique=True)
     api_key = Required('keys')
     orders = Set('orders')
 
 
-class companies(db.Entity):
+class Companies(db.Entity):
     name = Required(str)
     description = Required(str)
     address = Required(str)
@@ -33,7 +33,7 @@ class companies(db.Entity):
     api_key = Required('keys')
 
 
-class workers(db.Entity):
+class Workers(db.Entity):
     name = Required(str)
     surname = Required(str)
     patronymic = Required(str)
@@ -48,25 +48,25 @@ class workers(db.Entity):
     orders = Set('orders')
 
 
-class workers_status(db.Entity):
+class Workers_status(db.Entity):
     description = Required(str)
     workers = Set(workers)
 
 
-class workers_location_history(db.Entity):
+class Workers_location_history(db.Entity):
     worker = Required(workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
     time_stramp = Required(datetime)
 
 
-class workers_last_location(db.Entity):
+class Workers_last_location(db.Entity):
     worker = Required(workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
 
 
-class keys(db.Entity):
+class Keys(db.Entity):
     key = Required(str)
     role = Required(str)
     clients = Set(clients)
@@ -74,7 +74,7 @@ class keys(db.Entity):
     companies = Set(companies)
 
 
-class orders(db.Entity):
+class Orders(db.Entity):
     client = Required(clients)
     worker = Required(workers)
     start_client_lat = Required(Decimal)
@@ -88,7 +88,7 @@ class orders(db.Entity):
     status = Required('orders_status')
 
 
-class orders_status(db.Entity):
+class Orders_status(db.Entity):
     description = Required(str)
     orders = Set(orders)
 
