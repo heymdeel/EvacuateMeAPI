@@ -42,6 +42,7 @@ class Workers(db.Entity):
     date_of_hire = Required(datetime)
     status = Required('Workers_status')
     phone = Required(str)
+    # car_number = Required(str, unique=True)
     api_key = Required('Keys')
     company = Required(Companies)
     location_history = Set('Workers_location_history')
