@@ -1,11 +1,12 @@
 import os
 from models import *
 from flask import Flask
-from clients import clients_api
+from clientsAPI import clients_api
 
 app = Flask(__name__)
 
 app.register_blueprint(clients_api)
+
 
 @app.route('/')
 def start():

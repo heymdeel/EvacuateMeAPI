@@ -42,7 +42,6 @@ class Workers(db.Entity):
     date_of_hire = Required(datetime)
     status = Required('Workers_status')
     phone = Required(str)
-    # car_number = Required(str, unique=True)
     api_key = Required('Keys')
     company = Required(Companies)
     location_history = Set('Workers_location_history')
@@ -70,10 +69,15 @@ class Workers_last_location(db.Entity):
 
 class Keys(db.Entity):
     key = Required(str)
-    role = Required(str)
+    role = Required('Roles')
     clients = Set(Clients)
     workers = Set(Workers)
     companies = Set(Companies)
+
+
+class Roles(db.Entity):
+    name = Required(str)
+    keys = Set(Keys)
 
 
 class Orders(db.Entity):
