@@ -2,7 +2,7 @@ import os
 from models import *
 from flask import Flask
 from clientsAPI import clients_api
-from help import help_api
+from helpAPI import help_api
 
 app = Flask(__name__)
 
