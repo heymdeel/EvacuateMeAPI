@@ -1,4 +1,5 @@
 from pony.orm import *
+from decimal import Decimal
 from datetime import datetime
 
 db = Database()
