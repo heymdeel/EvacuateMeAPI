@@ -37,6 +37,7 @@ def sign_up():
         return api_key, 201
     return 404
 
+
 @clients_api.route('/api/clients/api_key')
 @db_session
 def sign_up():
