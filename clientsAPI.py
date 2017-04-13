@@ -40,7 +40,7 @@ def sign_up():
 
 @clients_api.route('/api/clients/api_key')
 @db_session
-def sign_up():
+def sign_in():
     if 'phone' in request.headers and 'code' in request.headers:
         phone = request.headers['phone']
         code = request.headers['code']
