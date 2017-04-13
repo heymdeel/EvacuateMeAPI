@@ -29,7 +29,7 @@ def get_code(phone):
 def sign_up():
     req = request.get_json()
     if SMS_codes.exists(lambda s: s.phone == req['phone']
-                        and s.code == req['code'])
+                        and s.code == req['code']):
         api_key = hashlib.md5(req['code'].encode() + req['phone'].encode())
         key = Keys(key=api_key.hexdigest(), role=Roles.get(name='Client'))
         return api_key, 201
