@@ -17,11 +17,9 @@ def verificate(phone):
 @clients_api.route('/api/clients/code/<string:phone>')
 @db_session
 def get_code(phone):
-    if Clients.exists(lambda c: c.phone == phone):
-        code = random(1000, 9999)
-        SMS_codes(phone=phone, code=code, time_stramp=datetime.now())
-        return '', 200
-    return '', 404
+    code = random(1000, 9999)
+    SMS_codes(phone=phone, code=code, time_stramp=datetime.now())
+    return '', 200
 
 
 @clients_api.route('/api/clients', methods=['POST'])
