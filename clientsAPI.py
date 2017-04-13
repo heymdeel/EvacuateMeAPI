@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, make_response, request
 from models import *
 from datetime import datetime
 import hashlib
+import random
 
 clients_api = Blueprint('clients_api', __name__)
 
@@ -17,7 +18,7 @@ def verificate(phone):
 @clients_api.route('/api/clients/code/<string:phone>')
 @db_session
 def get_code(phone):
-    code = random(1000, 9999)
+    code = random.randint(1000, 9999)
     SMS_codes(phone=phone, code=code, time_stramp=datetime.now())
     return '', 200
 
