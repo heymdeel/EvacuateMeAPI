@@ -1,3 +1,4 @@
+import os
 from models import *
 from flask import Flask
 
