@@ -24,12 +24,30 @@ def get_code(phone):
     return 404
 
 
-@clients_api.route('/api/clients>', methods=['POST'])
+@clients_api.route('/api/clients', methods=['POST'])
 @db_session
 def sign_up():
     req = request.get_json()
     if SMS_codes.exists(lambda s: s.phone == req['phone']
-                        and s.code == req['code'])
-        api_key = hashlib.md5(req['code'].encode() + req['phone'].encode())
-        key = Keys(key=api_key.hexdigest(), role=Roles.get(name='Client'))
+                        and s.code == req['code']):
+        hash_key = hashlib.md5(req['code'].encode() + req['phone'].encode())
+        api_key = hash_key.hexdigest()
+        key = Keys(key=api_key, role=Roles.get(name='Client'))
+        Clients(name=req['name'], phone=req['phone'], api_key=key)
         return api_key, 201
+    return 404
+
+@clients_api.route('/api/clients/api_key')
+@db_session
+def sign_up():
+    if 'phone' in request.headers and 'code' in request.headers:
+        phone = request.headers['phone']
+        code = request.headers['code']
+        if SMS_codes.exists(lambda s: s.phone == phone
+                            and s.code == code):
+            hash_key = hashlib.md5(code.encode() + phone.encode())
+            api_key = hash_key.hexdigest()
+            Clients.get(phone=phone).api_key.key = api_key
+            return api_key, 200
+        return 404
+    return 400
