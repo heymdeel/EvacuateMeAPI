@@ -10,8 +10,8 @@ clients_api = Blueprint('clients_api', __name__)
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
-        return 200
-    return 404
+        return '', 200
+    return '', 404
 
 
 @clients_api.route('/api/clients/code/<string:phone>')
@@ -20,8 +20,8 @@ def get_code(phone):
     if Clients.exists(lambda c: c.phone == phone):
         code = random(1000, 9999)
         SMS_codes(phone=phone, code=code, time_stramp=datetime.now())
-        return 200
-    return 404
+        return '', 200
+    return '', 404
 
 
 @clients_api.route('/api/clients', methods=['POST'])
@@ -35,7 +35,7 @@ def sign_up():
         key = Keys(key=api_key, role=Roles.get(name='Client'))
         Clients(name=req['name'], phone=req['phone'], api_key=key)
         return api_key, 201
-    return 404
+    return '', 404
 
 
 @clients_api.route('/api/clients/api_key')
@@ -50,5 +50,5 @@ def sign_in():
             api_key = hash_key.hexdigest()
             Clients.get(phone=phone).api_key.key = api_key
             return api_key, 200
-        return 404
-    return 400
+        return '', 404
+    return '', 400
