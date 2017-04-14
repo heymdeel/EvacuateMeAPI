@@ -32,7 +32,7 @@ def get_code(phone):
     else:
         SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
     #grequests.map(rs)
-    return '', 200
+    return 'ok', 200
 
 
 @login_api.route('/api/clients', methods=['POST'])
