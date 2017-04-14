@@ -44,7 +44,7 @@ class Workers(db.Entity):
     status = Required('Workers_status')
     phone = Required(str, unique=True)
     api_key = Required('Keys')
-    car_number = Required(str)
+    car_number = Required(str, unique=True)
     company = Required(Companies)
     location_history = Set('Workers_location_history')
     last_location = Optional('Workers_last_location')
@@ -65,13 +65,13 @@ class Workers_location_history(db.Entity):
 
 
 class Workers_last_location(db.Entity):
-    worker = Required(Workers)
+    worker = PrimaryKey(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
 
 
 class Keys(db.Entity):
-    key = Required(str)
+    key = Required(str, unique=True)
     role = Required('Roles')
     client = Optional(Clients)
     worker = Optional(Workers)

@@ -12,7 +12,7 @@ login_api = Blueprint('clients_api', __name__)
 login_api.add_app_url_map_converter(RegexConverter, 'regex')
 
 
-@login_api.route('/api/clients/verification/<regex("7[0-9]{10}"):phone>')
+@login_api.route('/api/clients/verification/<regex("[0-9]{11}"):phone>')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
@@ -20,7 +20,7 @@ def verificate(phone):
     return 'user was not found', 404
 
 
-@login_api.route('/api/clients/code/<regex("7[0-9]{10}"):phone>')
+@login_api.route('/api/clients/code/<regex("[0-9]{11}"):phone>')
 @db_session
 def get_code(phone):
     code = random.randint(1000, 9999)
