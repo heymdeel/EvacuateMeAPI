@@ -41,16 +41,11 @@ def get_code(phone):
 @db_session
 def sign_up():
     req = request.get_json()
-    if SMS_codes.exists(lambda s: s.phone == req['phone']
-                        and s.code == req['code']):
-        sms_code = SMS_codes.get(lambda s: s.phone == req['phone']
-                        and s.code == req['code'])
-        sms_code.delete()
-        hash_key = hashlib.md5(str(req['code']).encode() + req['phone'].encode())
-        api_key = hash_key.hexdigest()
-        key = Keys(key=api_key, role=Roles.get(name='Client'))
+    if SMS_codes.exists(lambda s: s.phone == req['phone'] and s.code == req['code']):
+        new_key = renew_code(req['phone'], req['code'])
+        key = Keys(key=new_key, role=Roles.get(name='Client'))
         Clients(name=req['name'], phone=req['phone'], api_key=key)
-        return api_key, 201
+        return new_key, 201
     return '', 404
 
 
@@ -60,14 +55,16 @@ def sign_in():
     if 'phone' in request.headers and 'code' in request.headers:
         phone = request.headers['phone']
         code = request.headers['code']
-        if SMS_codes.exists(lambda s: s.phone == phone
-                            and s.code == code):
-            sms_code = SMS_codes.get(lambda s: s.phone == phone
-                                               and s.code == code)
-            sms_code.delete()
-            hash_key = hashlib.md5(str(code).encode() + phone.encode())
-            api_key = hash_key.hexdigest()
-            Clients.get(phone=phone).api_key.key = api_key
-            return api_key, 200
+        if SMS_codes.exists(lambda s: s.phone == phone and s.code == code):
+            new_key = renew_code(phone, code)
+            Clients.get(phone=phone).api_key.key = new_key
+            return new_key, 200
         return '', 404
     return '', 400
+
+
+def renew_code(phone, code):
+    SMS_codes.get(lambda s: s.phone == phone and s.code == code).delete()
+    hash_key = hashlib.md5(str(code).encode() + phone.encode())
+    api_key = hash_key.hexdigest()
+    return api_key
