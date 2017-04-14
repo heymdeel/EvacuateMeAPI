@@ -12,7 +12,7 @@ scheduler.add_job(
     func=clean_sms_codes,
     trigger=IntervalTrigger(seconds=20),
     id='clean_codes',
-    name='clean sms codes every minute',
+    name='clean sms codes every 20 seconds',
     replace_existing=True)
 
 app = Flask(__name__)
@@ -27,5 +27,5 @@ def start():
 
 if __name__ == '__main__':
     app.config['JSON_AS_ASCII'] = False
-    #app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
+    #app.run(debug=True)
