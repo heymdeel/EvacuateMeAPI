@@ -8,11 +8,11 @@ from datetime import datetime
 from reg_exp import *
 
 
-clients_api = Blueprint('clients_api', __name__)
-clients_api.add_app_url_map_converter(RegexConverter, 'regex')
+login_api = Blueprint('clients_api', __name__)
+login_api.add_app_url_map_converter(RegexConverter, 'regex')
 
 
-@clients_api.route('/api/clients/verification/<regex("7[0-9]{11}"):phone>')
+@login_api.route('/api/clients/verification/<regex("7[0-9]{11}"):phone>')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
@@ -20,7 +20,7 @@ def verificate(phone):
     return 'user was not found', 404
 
 
-@clients_api.route('/api/clients/code/<regex("7[0-9]{11}"):phone>')
+@login_api.route('/api/clients/code/<regex("7[0-9]{11}"):phone>')
 @db_session
 def get_code(phone):
     code = random.randint(1000, 9999)
@@ -32,7 +32,7 @@ def get_code(phone):
     return '', 200
 
 
-@clients_api.route('/api/clients', methods=['POST'])
+@login_api.route('/api/clients', methods=['POST'])
 @db_session
 def sign_up():
     req = request.get_json()
@@ -44,7 +44,7 @@ def sign_up():
     return 'sms time was out', 404
 
 
-@clients_api.route('/api/clients/api_key')
+@login_api.route('/api/clients/api_key')
 @db_session
 def sign_in():
     if 'phone' in request.headers and 'code' in request.headers:
@@ -56,21 +56,3 @@ def sign_in():
             return new_key, 200
         return 'sms time was out', 404
     return 'missing phone and sms-code', 400
-
-
-@clients_api.route('/api/help/companies', methods=['POST'])
-@db_session
-def call_help():
-    if key_is_valid(request):
-        companies = []
-        for c in Companies.select():
-            companies.append(c.to_dict())
-            return jsonify(companies), 200
-    return '', 401
-
-
-@clients_api.route('/api/orders/<string:company_name>', methods=['POST'])
-@db_session
-def place_order(company_name):
-    if key_is_valid(request):
-        return 'in construction', 200

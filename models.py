@@ -12,7 +12,7 @@ class SMS_codes(db.Entity):
 
 
 class Clients(db.Entity):
-    name = Required(str)
+    name = Required(str, 10)
     phone = Required(str, unique=True)
     api_key = Required('Keys')
     orders = Set('Orders')

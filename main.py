@@ -1,8 +1,6 @@
 import os
 from flask import Flask
-from clientsAPI import clients_api
-from helpAPI import help_api
-from workersAPI import workers_api
+from loginAPI import login_api
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -18,9 +16,7 @@ scheduler.add_job(
     replace_existing=True)
 
 app = Flask(__name__)
-app.register_blueprint(clients_api)
-app.register_blueprint(help_api)
-app.register_blueprint(workers_api)
+app.register_blueprint(login_api)
 atexit.register(lambda: scheduler.shutdown())
 
 
@@ -31,5 +27,5 @@ def start():
 
 if __name__ == '__main__':
     app.config['JSON_AS_ASCII'] = False
-    app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
-    #app.run(debug=True)
+    #app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
+    app.run(debug=True)
