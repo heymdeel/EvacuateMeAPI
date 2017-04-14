@@ -17,6 +17,4 @@ def renew_code(phone, code):
 
 @db_session
 def clean_sms_codes():
-    if len(SMS_codes) == 0:
-        return
     delete(sms_code for sms_code in SMS_codes if datetime.datetime.now() - datetime.timedelta(minutes=5) > sms_code.time_stamp)

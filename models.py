@@ -7,7 +7,7 @@ db = Database()
 
 class SMS_codes(db.Entity):
     phone = Required(str, unique=True)
-    code = Required(int)
+    code = Required(int, )
     time_stamp = Required(datetime)
 
 
@@ -28,8 +28,8 @@ class Companies(db.Entity):
     tariff = Required(float)
     sum_rate = Required(int)
     count_rate = Required(int)
-    logo_url = Required(str)
-    login = Required(str)
+    logo_url = Required(str, unique=True)
+    login = Required(str, unique=True)
     password = Required(str)
     workers = Set('Workers')
     api_key = Required('Keys')
@@ -42,7 +42,7 @@ class Workers(db.Entity):
     date_of_birth = Required(datetime)
     date_of_hire = Required(datetime)
     status = Required('Workers_status')
-    phone = Required(str)
+    phone = Required(str, unique=True)
     api_key = Required('Keys')
     car_number = Required(str)
     company = Required(Companies)
