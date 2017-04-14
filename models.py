@@ -4,6 +4,7 @@ from datetime import datetime
 
 db = Database()
 
+
 class SMS_codes(db.Entity):
     phone = Required(str, unique=True)
     code = Required(int)
