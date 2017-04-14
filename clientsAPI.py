@@ -4,12 +4,11 @@ import random
 import grequests
 from sms import *
 from datetime import datetime
-from main import RegexConverter
 
 clients_api = Blueprint('clients_api', __name__)
 
 
-@clients_api.route('/api/clients/verification/<regex("7[0-9]{11}"):phone>')
+@clients_api.route('/api/clients/verification/<string:phone>')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):

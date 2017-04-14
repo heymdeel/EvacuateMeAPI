@@ -9,11 +9,6 @@ from sms import clean_sms_codes
 from werkzeug.routing import BaseConverter
 
 
-class RegexConverter(BaseConverter):
-    def __init__(self, url_map, *items):
-        super(RegexConverter, self).__init__(url_map)
-        self.regex = items[0]
-
 scheduler = BackgroundScheduler()
 scheduler.start()
 scheduler.add_job(
@@ -26,7 +21,6 @@ scheduler.add_job(
 app = Flask(__name__)
 app.register_blueprint(clients_api)
 app.register_blueprint(help_api)
-app.url_map.converters['regex'] = RegexConverter
 atexit.register(lambda: scheduler.shutdown())
 
 
