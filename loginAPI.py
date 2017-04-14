@@ -28,7 +28,7 @@ def get_code(phone):
     r = create_code_response(phone, code)
     urls = [r]
     rs = (grequests.post(u) for u in urls)
-    grequests.map(rs)
+    #grequests.map(rs)
     return '', 200
 
 
