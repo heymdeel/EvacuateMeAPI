@@ -1,17 +1,10 @@
 import os
 from flask import Flask
-from clientsAPI import clients_api
-from helpAPI import help_api
+from loginAPI import login_api
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from sms import clean_sms_codes
-
-app = Flask(__name__)
-app.register_blueprint(clients_api)
-app.register_blueprint(help_api)
-atexit.register(lambda: scheduler.shutdown())
-
 
 scheduler = BackgroundScheduler()
 scheduler.start()
@@ -19,8 +12,12 @@ scheduler.add_job(
     func=clean_sms_codes,
     trigger=IntervalTrigger(seconds=20),
     id='clean_codes',
-    name='clean sms codes every minute',
+    name='clean sms codes every 20 seconds',
     replace_existing=True)
+
+app = Flask(__name__)
+app.register_blueprint(login_api)
+atexit.register(lambda: scheduler.shutdown())
 
 
 @app.route('/')
