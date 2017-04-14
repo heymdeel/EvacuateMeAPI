@@ -6,11 +6,7 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from sms import clean_sms_codes
-
-app = Flask(__name__)
-app.register_blueprint(clients_api)
-app.register_blueprint(help_api)
-atexit.register(lambda: scheduler.shutdown())
+from werkzeug.routing import BaseConverter
 
 
 scheduler = BackgroundScheduler()
@@ -21,6 +17,11 @@ scheduler.add_job(
     id='clean_codes',
     name='clean sms codes every minute',
     replace_existing=True)
+
+app = Flask(__name__)
+app.register_blueprint(clients_api)
+app.register_blueprint(help_api)
+atexit.register(lambda: scheduler.shutdown())
 
 
 @app.route('/')
