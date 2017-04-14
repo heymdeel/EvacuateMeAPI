@@ -22,4 +22,4 @@ def code_is_valid(req):
 
 
 def clean_sms_codes():
-    delete(sms_code for sms_code in SMS_codes if datetime.datetime.now - datetime.timedelta(minutes=5) > sms_code.time_stamp)
+    delete(sms_code for sms_code in SMS_codes if datetime.now - datetime.timedelta(minutes=5) > sms_code.time_stamp)
