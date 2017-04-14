@@ -20,7 +20,7 @@ def verificate(phone):
 @db_session
 def get_code(phone):
     code = random.randint(1000, 9999)
-    SMS_codes(phone=phone, code=code, time_stramp=datetime.now())
+    SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
     r = create_code_response(phone, code)
     urls = [r]
     rs = (grequests.post(u) for u in urls)
