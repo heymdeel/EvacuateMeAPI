@@ -1,20 +1,12 @@
 from flask import Blueprint, jsonify, make_response, request
 from models import *
 from datetime import datetime
-import hashlib
+
 import random
 import grequests
+from sms import *
 
 clients_api = Blueprint('clients_api', __name__)
-
-
-def create_code_response(phone, code):
-    URL = 'http://smsc.ru/sys/send.php?login=Debian17&psw=qwerty12&charset=utf-8'
-    URL += '&phones='
-    URL += phone
-    URL += '&mes=Ваш код активации:'
-    URL += str(code)
-    return URL
 
 
 @clients_api.route('/api/clients/verification/<string:phone>')
@@ -61,19 +53,6 @@ def sign_in():
             return new_key, 200
         return '', 404
     return '', 400
-
-
-def renew_code(phone, code):
-    SMS_codes.get(lambda s: s.phone == phone and s.code == code).delete()
-    hash_key = hashlib.md5(str(code).encode() + phone.encode())
-    api_key = hash_key.hexdigest()
-    return api_key
-
-
-def code_is_valid(req):
-    if 'key' in req.headers and Clients.exists(lambda c: c.api_key.key == req.headers['key']):
-        return True
-    return False
 
 
 @clients_api.route('/api/help/companies', methods=['POST'])
