@@ -30,8 +30,8 @@
       <file leaf-file-name="loginAPI.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/loginAPI.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="17" column="50" lean-forward="true" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
+            <state relative-caret-position="170">
+              <caret line="19" column="27" lean-forward="true" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
               <folding>
                 <element signature="e#0#60#0" expanded="true" />
               </folding>
@@ -357,7 +357,14 @@
       <option name="project" value="LOCAL" />
       <updated>1492179763775</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="regeexp is back">
+      <created>1492180018444</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1492180018444</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -395,7 +402,8 @@
     <MESSAGE value="removed regexp" />
     <MESSAGE value="бэт, хватит палить коммиты" />
     <MESSAGE value="another bad deploy" />
-    <option name="LAST_COMMIT_MESSAGE" value="another bad deploy" />
+    <MESSAGE value="regeexp is back" />
+    <option name="LAST_COMMIT_MESSAGE" value="regeexp is back" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -769,8 +777,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/loginAPI.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="17" column="50" lean-forward="true" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
+        <state relative-caret-position="170">
+          <caret line="19" column="27" lean-forward="true" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
           <folding>
             <element signature="e#0#60#0" expanded="true" />
           </folding>

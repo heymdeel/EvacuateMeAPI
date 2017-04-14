@@ -16,11 +16,11 @@ login_api.add_app_url_map_converter(RegexConverter, 'regex')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
-        return make_response(phone + 'ok', 200)
-    return make_response(phone + 'bad', 404)
+        return 'ok', 200
+    return 'not found', 404
 
 
-@login_api.route('/api/clients/code/<string:phone>')
+@login_api.route('/api/clients/code/<regex("7[0-9]{10}"):phone>')
 @db_session
 def get_code(phone):
     code = random.randint(1000, 9999)
