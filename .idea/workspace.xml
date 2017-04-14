@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb66253a-b76f-4c59-bc33-ec0fa32f657e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -361,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1492206583364</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fixed gitignore">
+      <created>1492207629436</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1492207629436</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -401,7 +407,8 @@
     <MESSAGE value="another bad deploy" />
     <MESSAGE value="regeexp is back" />
     <MESSAGE value="little fix in dbhelper" />
-    <option name="LAST_COMMIT_MESSAGE" value="little fix in dbhelper" />
+    <MESSAGE value="fixed gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
