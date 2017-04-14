@@ -1,10 +1,9 @@
 from flask import Blueprint, jsonify, make_response, request
 from models import *
-from datetime import datetime
-
 import random
 import grequests
 from sms import *
+from datetime import datetime
 
 clients_api = Blueprint('clients_api', __name__)
 
