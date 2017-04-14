@@ -28,9 +28,7 @@ def get_code(phone):
     urls = [r]
     rs = (grequests.post(u) for u in urls)
     if SMS_codes.exists(phone=phone):
-        sms = SMS_codes.get(phone=phone)
-        sms.code = code
-        sms.time_stamp = datetime.now()
+        SMS_codes.get(phone=phone).set(code=code, time_stamp=datetime.now())
     else:
         SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
     #grequests.map(rs)
