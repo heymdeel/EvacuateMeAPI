@@ -41,9 +41,11 @@ def get_code(phone):
 @db_session
 def sign_up():
     req = request.get_json()
-    print(req)
-    if SMS_codes.exists(lambda s: s.phone == req['phone'] and
-                        s.code == req['code']):
+    if SMS_codes.exists(lambda s: s.phone == req['phone']
+                        and s.code == req['code']):
+        sms_code = SMS_codes.get(lambda s: s.phone == req['phone']
+                        and s.code == req['code'])
+        sms_code.delete()
         hash_key = hashlib.md5(str(req['code']).encode() + req['phone'].encode())
         api_key = hash_key.hexdigest()
         key = Keys(key=api_key, role=Roles.get(name='Client'))
@@ -58,8 +60,11 @@ def sign_in():
     if 'phone' in request.headers and 'code' in request.headers:
         phone = request.headers['phone']
         code = request.headers['code']
-        if SMS_codes.exists(lambda s: s.phone == phone and
-                            s.code == code):
+        if SMS_codes.exists(lambda s: s.phone == phone
+                            and s.code == code):
+            sms_code = SMS_codes.get(lambda s: s.phone == phone
+                                               and s.code == code)
+            sms_code.delete()
             hash_key = hashlib.md5(str(code).encode() + phone.encode())
             api_key = hash_key.hexdigest()
             Clients.get(phone=phone).api_key.key = api_key

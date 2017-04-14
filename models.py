@@ -8,7 +8,7 @@ db = Database()
 class SMS_codes(db.Entity):
     phone = Required(str, unique=True)
     code = Required(int)
-    time_stramp = Required(datetime)
+    time_stamp = Required(datetime)
 
 
 class Clients(db.Entity):
@@ -59,7 +59,7 @@ class Workers_location_history(db.Entity):
     worker = Required(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
-    time_stramp = Required(datetime)
+    time_stamp = Required(datetime)
 
 
 class Workers_last_location(db.Entity):
@@ -88,7 +88,7 @@ class Orders(db.Entity):
     start_client_long = Required(Decimal)
     start_worker_lat = Required(Decimal)
     start_worker_long = Required(Decimal)
-    begining_time = Required(datetime)
+    beginning_time = Required(datetime)
     termination_time = Optional(datetime)
     final_lat = Optional(Decimal)
     final_long = Optional(Decimal)
