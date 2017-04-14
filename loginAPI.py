@@ -16,8 +16,8 @@ login_api.add_app_url_map_converter(RegexConverter, 'regex')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
-        return '', 200
-    return make_response('ты хуй', 404)
+        return make_response(phone, 200)
+    return make_response(phone, 404)
 
 
 @login_api.route('/api/clients/code/<string:phone>')
