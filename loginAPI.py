@@ -12,12 +12,12 @@ login_api = Blueprint('clients_api', __name__)
 login_api.add_app_url_map_converter(RegexConverter, 'regex')
 
 
-@login_api.route('/api/clients/verification/<string:phone>')
+@login_api.route('/api/clients/verification/<regex("7[0-9]{10}"):phone>')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
-        return make_response(phone, 200)
-    return make_response(phone, 404)
+        return make_response(phone + 'ok', 200)
+    return make_response(phone + 'bad', 404)
 
 
 @login_api.route('/api/clients/code/<string:phone>')
