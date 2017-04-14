@@ -4,10 +4,11 @@ from datetime import datetime
 
 db = Database()
 
+
 class SMS_codes(db.Entity):
     phone = Required(str, unique=True)
     code = Required(int)
-    time_stramp = Required(datetime)
+    time_stamp = Required(datetime)
 
 
 class Clients(db.Entity):
@@ -47,6 +48,7 @@ class Workers(db.Entity):
     location_history = Set('Workers_location_history')
     last_location = Optional('Workers_last_location')
     orders = Set('Orders')
+    supported_car_type = Required('Car_type')
 
 
 class Workers_status(db.Entity):
@@ -58,7 +60,7 @@ class Workers_location_history(db.Entity):
     worker = Required(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
-    time_stramp = Required(datetime)
+    time_stamp = Required(datetime)
 
 
 class Workers_last_location(db.Entity):
@@ -70,9 +72,9 @@ class Workers_last_location(db.Entity):
 class Keys(db.Entity):
     key = Required(str)
     role = Required('Roles')
-    clients = Set(Clients)
-    workers = Set(Workers)
-    companies = Set(Companies)
+    client = Optional(Clients)
+    worker = Optional(Workers)
+    company = Optional(Companies)
 
 
 class Roles(db.Entity):
@@ -87,11 +89,18 @@ class Orders(db.Entity):
     start_client_long = Required(Decimal)
     start_worker_lat = Required(Decimal)
     start_worker_long = Required(Decimal)
-    begining_time = Required(datetime)
+    beginning_time = Required(datetime)
     termination_time = Optional(datetime)
     final_lat = Optional(Decimal)
     final_long = Optional(Decimal)
     status = Required('Orders_status')
+    car_type = Required('Car_type')
+
+
+class Car_type(db.Entity):
+    type_name = Required(str)
+    orders = Set(Orders)
+    workers = Set(Workers)
 
 
 class Orders_status(db.Entity):
