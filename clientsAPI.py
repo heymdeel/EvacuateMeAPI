@@ -8,7 +8,7 @@ from datetime import datetime
 clients_api = Blueprint('clients_api', __name__)
 
 
-@clients_api.route('/api/clients/verification/<string:phone>')
+@clients_api.route('/api/clients/verification/<regex("7[0-9]{11}"):phone>')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
