@@ -12,7 +12,7 @@ class SMS_codes(db.Entity):
 
 
 class Clients(db.Entity):
-    name = Required(str)
+    name = Required(str, 10)
     phone = Required(str, unique=True)
     api_key = Required('Keys')
     orders = Set('Orders')
@@ -28,8 +28,8 @@ class Companies(db.Entity):
     tariff = Required(float)
     sum_rate = Required(int)
     count_rate = Required(int)
-    logo_url = Required(str)
-    login = Required(str)
+    logo_url = Required(str, unique=True)
+    login = Required(str, unique=True)
     password = Required(str)
     workers = Set('Workers')
     api_key = Required('Keys')
@@ -42,9 +42,9 @@ class Workers(db.Entity):
     date_of_birth = Required(datetime)
     date_of_hire = Required(datetime)
     status = Required('Workers_status')
-    phone = Required(str)
+    phone = Required(str, unique=True)
     api_key = Required('Keys')
-    car_number = Required(str)
+    car_number = Required(str, unique=True)
     company = Required(Companies)
     location_history = Set('Workers_location_history')
     last_location = Optional('Workers_last_location')
@@ -65,13 +65,13 @@ class Workers_location_history(db.Entity):
 
 
 class Workers_last_location(db.Entity):
-    worker = Required(Workers)
+    worker = PrimaryKey(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
 
 
 class Keys(db.Entity):
-    key = Required(str)
+    key = Required(str, unique=True)
     role = Required('Roles')
     client = Optional(Clients)
     worker = Optional(Workers)
