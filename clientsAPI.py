@@ -4,6 +4,7 @@ import random
 import grequests
 from sms import *
 from datetime import datetime
+from main import RegexConverter
 
 clients_api = Blueprint('clients_api', __name__)
 
