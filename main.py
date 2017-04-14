@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from clientsAPI import clients_api
+from helpAPI import help_api
+from workersAPI import workers_api
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -17,6 +19,8 @@ scheduler.add_job(
 
 app = Flask(__name__)
 app.register_blueprint(clients_api)
+app.register_blueprint(help_api)
+app.register_blueprint(workers_api)
 atexit.register(lambda: scheduler.shutdown())
 
 

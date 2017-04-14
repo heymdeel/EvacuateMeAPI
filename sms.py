@@ -15,12 +15,6 @@ def renew_code(phone, code):
     return api_key
 
 
-def code_is_valid(req):
-    if 'key' in req.headers and Clients.exists(lambda c: c.api_key.key == req.headers['key']):
-        return True
-    return False
-
-
 @db_session
 def clean_sms_codes():
     if len(SMS_codes) == 0:

@@ -3,6 +3,7 @@ from models import *
 import random
 import grequests
 from sms import *
+from utils import *
 from datetime import datetime
 from reg_exp import *
 
@@ -60,7 +61,7 @@ def sign_in():
 @clients_api.route('/api/help/companies', methods=['POST'])
 @db_session
 def call_help():
-    if code_is_valid(request):
+    if key_is_valid(request):
         companies = []
         for c in Companies.select():
             companies.append(c.to_dict())
@@ -71,5 +72,5 @@ def call_help():
 @clients_api.route('/api/orders/<string:company_name>', methods=['POST'])
 @db_session
 def place_order(company_name):
-    if code_is_valid(request):
+    if key_is_valid(request):
         return 'in construction', 200
