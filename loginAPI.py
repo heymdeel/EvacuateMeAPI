@@ -24,12 +24,15 @@ def verificate(phone):
 @db_session
 def get_code(phone):
     code = random.randint(1000, 9999)
-    SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
     r = create_code_response(phone, code)
     urls = [r]
     rs = (grequests.post(u) for u in urls)
-    grequests.map(rs)
-    return '', 200
+    if SMS_codes.exists(phone=phone):
+        SMS_codes.get(phone=phone).set(code=code, time_stamp=datetime.now())
+    else:
+        SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
+    #grequests.map(rs)
+    return 'ok', 200
 
 
 @login_api.route('/api/clients', methods=['POST'])
