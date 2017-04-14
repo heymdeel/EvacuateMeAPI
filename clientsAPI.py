@@ -4,19 +4,22 @@ import random
 import grequests
 from sms import *
 from datetime import datetime
+from reg_exp import *
+
 
 clients_api = Blueprint('clients_api', __name__)
+clients_api.add_app_url_map_converter(RegexConverter, 'regex')
 
 
-@clients_api.route('/api/clients/verification/<string:phone>')
+@clients_api.route('/api/clients/verification/<regex("7[0-9]{11}"):phone>')
 @db_session
 def verificate(phone):
     if Clients.exists(lambda c: c.phone == phone):
         return '', 200
-    return '', 404
+    return 'user was not found', 404
 
 
-@clients_api.route('/api/clients/code/<string:phone>')
+@clients_api.route('/api/clients/code/<regex("7[0-9]{11}"):phone>')
 @db_session
 def get_code(phone):
     code = random.randint(1000, 9999)
@@ -37,7 +40,7 @@ def sign_up():
         key = Keys(key=new_key, role=Roles.get(name='Client'))
         Clients(name=req['name'], phone=req['phone'], api_key=key)
         return new_key, 201
-    return '', 404
+    return 'sms time was out', 404
 
 
 @clients_api.route('/api/clients/api_key')
@@ -50,8 +53,8 @@ def sign_in():
             new_key = renew_code(phone, code)
             Clients.get(phone=phone).api_key.key = new_key
             return new_key, 200
-        return '', 404
-    return '', 400
+        return 'sms time was out', 404
+    return 'missing phone and sms-code', 400
 
 
 @clients_api.route('/api/help/companies', methods=['POST'])
