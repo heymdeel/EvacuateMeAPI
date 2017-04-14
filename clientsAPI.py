@@ -68,3 +68,27 @@ def renew_code(phone, code):
     hash_key = hashlib.md5(str(code).encode() + phone.encode())
     api_key = hash_key.hexdigest()
     return api_key
+
+
+def code_is_valid(req):
+    if 'key' in req.headers and Clients.exists(lambda c: c.api_key.key == req.headers['key']):
+        return True
+    return False
+
+
+@clients_api.route('/api/help/companies', methods=['POST'])
+@db_session
+def call_help():
+    if code_is_valid(request):
+        companies = []
+        for c in Companies.select():
+            companies.append(c.to_dict())
+            return jsonify(companies), 200
+    return '', 401
+
+
+@clients_api.route('/api/orders/<string:company_name>', methods=['POST'])
+@db_session
+def place_order(company_name):
+    if code_is_valid(request):
+        return 'in construction', 200
