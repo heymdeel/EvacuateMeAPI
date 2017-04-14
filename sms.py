@@ -1,6 +1,6 @@
 from models import *
 import hashlib
-from datetime import datetime
+import datetime
 
 
 def create_code_response(phone, code):
