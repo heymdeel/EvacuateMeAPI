@@ -15,7 +15,7 @@ login_api = Blueprint('clients_api', __name__)
 
 @login_api.route('/api/clients/verification/<string:phone>') #verificate if user with this phone number exists
 @db_session
-def verificate(phone):
+def clients_verification(phone):
     if not validate_phone(phone):
         return 'bad phone format', 400
     if Clients.exists(lambda c: c.phone == phone):
@@ -42,7 +42,7 @@ def get_code(phone):
 
 @login_api.route('/api/clients', methods=['POST']) #register new user
 @db_session
-def sign_up():
+def clients_sign_up():
     req = request.get_json()
     if not validate_phone(req['phone']):
         return 'bad phone format', 400
@@ -55,7 +55,7 @@ def sign_up():
 
 @login_api.route('/api/clients/api_key') #get api_key for sign in
 @db_session
-def sign_in():
+def clients_sign_in():
     if 'phone' in request.headers and 'code' in request.headers:
         phone = request.headers['phone']
         code = request.headers['code']
@@ -115,3 +115,29 @@ def worker_sign_up():
             return 'Failed to register worker. Error message: ' + str(e), 400
         return key, 201
     return 'api_key is required', 400
+
+
+@login_api.route('/api/workers/verification/<string:phone>') #verificate worker phone
+@db_session
+def workers_verification(phone):
+    if not validate_phone(phone):
+        return 'bad phone format', 400
+    if Workers.exists(lambda c: c.phone == phone):
+        return 'ok', 200
+    return 'worker was not found', 404
+
+
+@login_api.route('/api/workers/api_key') #get api_key for sign in
+@db_session
+def workers_sign_in():
+    if 'phone' in request.headers and 'code' in request.headers:
+        phone = request.headers['phone']
+        code = request.headers['code']
+        if not validate_phone(phone):
+            return 'bad phone format', 400
+        if SMS_codes.exists(lambda s: s.phone == phone and s.code == code):
+            new_key = renew_code(phone, code)
+            Workers.get(phone=phone).api_key = new_key
+            return new_key, 200
+        return 'sms time was out', 404
+    return 'missing phone or sms-code', 400
