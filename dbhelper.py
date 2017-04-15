@@ -30,7 +30,7 @@ def create_company(args):
               tariff=args['tariff'],
               logo_url=args['logo_url'],
               login=args['login'],
-              password=generate_password(args['login'], args['password'] + 'some_salt'),
+              password=generate_password(args['login'], 'some_salt' + args['password']),
               api_key=key,
               sum_rate=0,
               count_rate=0)

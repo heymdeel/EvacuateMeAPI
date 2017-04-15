@@ -89,7 +89,7 @@ def company_sign_up():
 def company_sign_in():
     if 'login' in request.headers and 'password' in request.headers:
         login = request.headers['login']
-        password = generate_hash(request.headers['password'], login)
+        password = generate_password(login, 'some_salt' + request.headers['password'])
         if Companies.exists(lambda c: c.login == login and c.password == password):
             new_key = generate_hash('login', rand_str(10))
             Companies.get(login=login).api_key = new_key
