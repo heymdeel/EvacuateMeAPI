@@ -27,5 +27,5 @@ def start():
 
 if __name__ == '__main__':
     app.config['JSON_AS_ASCII'] = False
-    app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
-    #app.run(debug=True)
+    #app.run(host="0.0.0.0", port=os.environ.get('PORT', 5000))
+    app.run(debug=True)

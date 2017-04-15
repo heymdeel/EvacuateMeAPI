@@ -4,9 +4,13 @@ import grequests
 import random
 from utils import *
 from datetime import datetime
-from dbhelper import create_company
+from dbhelper import create_company, create_worker
 
 login_api = Blueprint('clients_api', __name__)
+
+
+#======================================|CLIENT|========================================================================
+#======================================================================================================================
 
 
 @login_api.route('/api/clients/verification/<string:phone>') #verificate if user with this phone number exists
@@ -65,6 +69,10 @@ def sign_in():
     return 'missing phone or sms-code', 400
 
 
+#======================================|COMPANY|=======================================================================
+#======================================================================================================================
+
+
 @login_api.route('/api/companies', methods=['POST']) #register new company
 @db_session
 def company_sign_up():
@@ -72,7 +80,7 @@ def company_sign_up():
     try:
         key = create_company(req_json)
     except Exception as e:
-        return 'Failed to create company. Error message: ' + str(e), 400
+        return 'Failed to register company. Error message: ' + str(e), 400
     return key, 201
 
 
@@ -88,3 +96,22 @@ def company_sign_in():
             return new_key, 200
         return 'no such user with these login and password', 404
     return 'missing login or password', 400
+
+
+#======================================|WORKER|========================================================================
+#======================================================================================================================
+
+@login_api.route('/api/workers', methods=['POST']) #register new worker
+@db_session
+def worker_sign_up():
+    if 'api_key' in request.headers:
+        if not Companies.exists(lambda c: c.api_key == request.headers['api_key']):
+            return 'access refused, need authorization', 401
+        company = Companies.get(api_key=request.headers['api_key'])
+        req_json = request.get_json()
+        try:
+            key = create_worker(req_json, company)
+        except Exception as e:
+            return 'Failed to register worker. Error message: ' + str(e), 400
+        return key, 201
+    return 'api_key is required', 400

@@ -35,3 +35,20 @@ def create_company(args):
               sum_rate=0,
               count_rate=0)
     return key
+
+
+@db_session
+def create_worker(args, company):
+    key = generate_hash(args['phone'], rand_str(10))
+    Workers(name=args['name'],
+            surname=args['surname'],
+            patronymic=args['patronymic'],
+            date_of_birth=datetime.strptime(args['date_of_birth'], "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone=args['phone'],
+            car_number=args['car_number'],
+            supported_car_type=args['supported_car_type'],
+            company=company,
+            api_key=key,
+            status=Workers_status.get(description='not working'))
+    return key
