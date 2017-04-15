@@ -2,10 +2,8 @@ from flask import Blueprint, jsonify, make_response, request
 from models import *
 import random
 import grequests
-from sms import *
 from utils import *
 from datetime import datetime
-from reg_exp import *
 
 orders_api = Blueprint('orders_api', __name__)
 

@@ -14,7 +14,7 @@ class SMS_codes(db.Entity):
 class Clients(db.Entity):
     name = Required(str, 10)
     phone = Required(str, unique=True)
-    api_key = Required('Keys')
+    api_key = Required(str, unique=True)
     orders = Set('Orders')
 
 
@@ -32,7 +32,7 @@ class Companies(db.Entity):
     login = Required(str, unique=True)
     password = Required(str)
     workers = Set('Workers')
-    api_key = Required('Keys')
+    api_key = Required(str, unique=True)
 
 
 class Workers(db.Entity):
@@ -43,7 +43,7 @@ class Workers(db.Entity):
     date_of_hire = Required(datetime)
     status = Required('Workers_status')
     phone = Required(str, unique=True)
-    api_key = Required('Keys')
+    api_key = Required(str,unique=True)
     car_number = Required(str, unique=True)
     company = Required(Companies)
     location_history = Set('Workers_location_history')
@@ -68,19 +68,6 @@ class Workers_last_location(db.Entity):
     worker = PrimaryKey(Workers)
     latitude = Required(Decimal)
     longitude = Required(Decimal)
-
-
-class Keys(db.Entity):
-    key = Required(str, unique=True)
-    role = Required('Roles')
-    client = Optional(Clients)
-    worker = Optional(Workers)
-    company = Optional(Companies)
-
-
-class Roles(db.Entity):
-    name = Required(str)
-    keys = Set(Keys)
 
 
 class Orders(db.Entity):
