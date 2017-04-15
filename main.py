@@ -4,7 +4,7 @@ from loginAPI import login_api
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
-from sms import clean_sms_codes
+from utils import clean_sms_codes
 
 scheduler = BackgroundScheduler()
 scheduler.start()
