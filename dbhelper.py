@@ -1,5 +1,6 @@
 from models import *
-from utils import generate_hash
+from utils import generate_hash, rand_str
+from datetime import datetime
 
 
 @db_session
@@ -19,7 +20,7 @@ def create_worker(key, args):
 
 @db_session
 def create_company(args):
-    key = generate_hash(args['login'], args['password'])
+    key = generate_hash(args['login'], rand_str(10))
     Companies(name=args['name'],
               description=args['description'],
               address=args['address'],
@@ -29,7 +30,7 @@ def create_company(args):
               tariff=args['tariff'],
               logo_url=args['logo_url'],
               login=args['login'],
-              password=args['password'],
+              password=generate_hash(args['password'], args['login']),
               api_key=key,
               sum_rate=0,
               count_rate=0)

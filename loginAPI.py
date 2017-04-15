@@ -1,10 +1,9 @@
 from flask import Blueprint, jsonify, make_response, request
 from models import *
-import random
 import grequests
+import random
 from utils import *
 from datetime import datetime
-import werkzeug.exceptions
 from dbhelper import create_company
 
 login_api = Blueprint('clients_api', __name__)
@@ -68,10 +67,24 @@ def sign_in():
 
 @login_api.route('/api/companies', methods=['POST']) #register new company
 @db_session
-def register_company():
+def company_sign_up():
     req_json = request.get_json()
     try:
         key = create_company(req_json)
     except Exception as e:
         return 'Failed to create company. Error message: ' + str(e), 400
     return key, 201
+
+
+@login_api.route('/api/companies/login') #login company
+@db_session
+def company_sign_in():
+    if 'login' in request.headers and 'password' in request.headers:
+        login = request.headers['login']
+        password = generate_hash(request.headers['password'], login)
+        if Companies.exists(lambda c: c.login == login and c.password == password):
+            new_key = generate_hash('login', rand_str(10))
+            Companies.get(login=login).api_key = new_key
+            return new_key, 200
+        return 'no such user with these login and password', 404
+    return 'missing login or password', 400
