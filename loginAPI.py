@@ -4,7 +4,8 @@ import random
 import grequests
 from utils import *
 from datetime import datetime
-
+import werkzeug.exceptions
+from dbhelper import create_company
 
 login_api = Blueprint('clients_api', __name__)
 
@@ -19,7 +20,7 @@ def verificate(phone):
     return 'client was not found', 404
 
 
-@login_api.route('/api/clients/code/<string:phone>') #request for sending sms to user
+@login_api.route('/api/code/<string:phone>') #request for sending sms to user
 @db_session
 def get_code(phone):
     if not validate_phone(phone):
@@ -63,3 +64,14 @@ def sign_in():
             return new_key, 200
         return 'sms time was out', 404
     return 'missing phone or sms-code', 400
+
+
+@login_api.route('/api/companies', methods=['POST']) #register new company
+@db_session
+def register_company():
+    req_json = request.get_json()
+    try:
+        key = create_company(req_json)
+    except Exception as e:
+        return 'Failed to create company. Error message: ' + str(e), 400
+    return key, 201
