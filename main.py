@@ -10,9 +10,9 @@ scheduler = BackgroundScheduler()
 scheduler.start()
 scheduler.add_job(
     func=clean_sms_codes,
-    trigger=IntervalTrigger(seconds=20),
+    trigger=IntervalTrigger(seconds=60),
     id='clean_codes',
-    name='clean sms codes every 20 seconds',
+    name='clean sms codes every minute',
     replace_existing=True)
 
 app = Flask(__name__)

@@ -1,8 +1,12 @@
 from models import *
-from models import *
 import hashlib
 import datetime
 import re
+import random, string
+
+
+def rand_str(length):
+    return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 
 
 def client_key_is_valid(req):
