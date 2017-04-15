@@ -46,7 +46,7 @@ def sign_up():
     if SMS_codes.exists(lambda s: s.phone == req['phone'] and s.code == req['code']):
         new_key = renew_code(req['phone'], req['code'])
         Clients(name=req['name'], phone=req['phone'], api_key=new_key)
-        return str(new_key), 201
+        return new_key, 201
     return 'sms time was out or code is invalid', 404
 
 
@@ -61,7 +61,7 @@ def sign_in():
         if SMS_codes.exists(lambda s: s.phone == phone and s.code == code):
             new_key = renew_code(phone, code)
             Clients.get(phone=phone).api_key = new_key
-            return str(new_key), 200
+            return new_key, 200
         return 'sms time was out', 404
     return 'missing phone or sms-code', 400
 
