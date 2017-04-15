@@ -24,8 +24,6 @@ def verificate(phone):
 def get_code(phone):
     if not validate_phone(phone):
         return 'bad phone format', 400
-    if not Clients.exists(lambda c: c.phone == phone):
-        return 'client was not found', 404
     code = random.randint(1000, 9999)
     r = create_code_response(phone, code)
     urls = [r]
