@@ -6,7 +6,7 @@ from utils import *
 from datetime import datetime
 from dbhelper import create_company, create_worker
 
-login_api = Blueprint('clients_api', __name__)
+login_api = Blueprint('login_api', __name__)
 
 
 #======================================|CLIENT|========================================================================
@@ -89,7 +89,7 @@ def company_sign_up():
 def company_sign_in():
     if 'login' in request.headers and 'password' in request.headers:
         login = request.headers['login']
-        password = generate_hash(request.headers['password'], login)
+        password = generate_password(login, 'some_salt' + request.headers['password'])
         if Companies.exists(lambda c: c.login == login and c.password == password):
             new_key = generate_hash('login', rand_str(10))
             Companies.get(login=login).api_key = new_key
@@ -106,7 +106,7 @@ def company_sign_in():
 def worker_sign_up():
     if 'api_key' in request.headers:
         if not Companies.exists(lambda c: c.api_key == request.headers['api_key']):
-            return 'access refused, need authorization', 401
+            return 'access refused, api_key is wrong', 401
         company = Companies.get(api_key=request.headers['api_key'])
         req_json = request.get_json()
         try:
@@ -114,7 +114,7 @@ def worker_sign_up():
         except Exception as e:
             return 'Failed to register worker. Error message: ' + str(e), 400
         return key, 201
-    return 'api_key is required', 400
+    return 'access refused, need authorization via api_key', 401
 
 
 @login_api.route('/api/workers/verification/<string:phone>') #verificate worker phone
