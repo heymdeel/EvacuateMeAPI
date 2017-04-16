@@ -1,0 +1,187 @@
+from flask import Blueprint, jsonify, make_response, request
+from models import *
+import grequests
+import random
+from utils import *
+from datetime import datetime
+from dbhelper import create_company, create_worker
+
+test_api = Blueprint('test_api', __name__)
+
+
+@test_api.route('/api/database/seed')
+@db_session
+def dangerous_method():
+    Car_type(name='Легковая')
+    Car_type(name='Грузовая')
+    Workers_status(id=0, description='not working')
+    Workers_status(id=1, description='working')
+
+    #====================|company 1|========================================================
+    key = generate_hash('company1', rand_str(10))
+    Companies(id=1,
+              name='ООО Эвакуатор',
+              description='бюджетная компания',
+              address='Текучева 132',
+              contact_phone='79285548796',
+              email='evacuator@gmail.com',
+              min_sum=500,
+              tariff=100,
+              logo_url='https://raw.githubusercontent.com/reactjs/redux/master/logo/logo.png',
+              login='company1',
+              password=generate_password('company1', 'some_salt' + 'qwerty'),
+              api_key=key,
+              sum_rate=0,
+              count_rate=0)
+
+    key = generate_hash('79613202176', rand_str(10))
+    Workers(name='Иван',
+            surname='Павлов',
+            patronymic='Петрович',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79613202176',
+            car_number='о1488ру 161',
+            supported_car_type=1,
+            company=1,
+            api_key=key,
+            status=Workers_status.get(description='not working'))
+
+    key = generate_hash('79782354687', rand_str(10))
+    Workers(name='Андрей',
+            surname='Сахаров',
+            patronymic='Дмитриевич',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79782354687',
+            car_number='о1482ру 161',
+            supported_car_type=1,
+            company=1,
+            api_key=key,
+            status=Workers_status.get(description='working'))
+
+    key = generate_hash('79247896241', rand_str(10))
+    Workers(name='Борис',
+            surname='Пастернак',
+            patronymic='Леонидович',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79247896241',
+            car_number='о1481ру 161',
+            supported_car_type=1,
+            company=1,
+            api_key=key,
+            status=Workers_status.get(description='not working'))
+
+    #====================|company 2|========================================================
+    key = generate_hash('company2', rand_str(10))
+    Companies(id=2,
+              name='Мега Эвакуатор',
+              description='недорогая компания',
+              address='Ворошиловский 35',
+              contact_phone='79523365478',
+              email='mega_evacuator@gmail.com',
+              min_sum=1000,
+              tariff=150,
+              logo_url='https://thumb7.shutterstock.com/display_pic_with_logo/3799943/566679331/stock-vector-evacuator-car-icon-isolated-on-white-background-evacuator-vector-logo-flat-design-style-modern-566679331.jpg',
+              login='company2',
+              password=generate_password('company2', 'some_salt' + 'qwerty'),
+              api_key=key,
+              sum_rate=0,
+              count_rate=0)
+
+    key = generate_hash('79265451223', rand_str(10))
+    Workers(name='Виталий',
+            surname='Гинзбург',
+            patronymic='Лазаревич',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79265451223',
+            car_number='о1483ру 161',
+            supported_car_type=1,
+            company=2,
+            api_key=key,
+            status=Workers_status.get(description='working'))
+
+    key = generate_hash('79652234789', rand_str(10))
+    Workers(name='Иван',
+            surname='Бунин',
+            patronymic='Алексеевич',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79652234789',
+            car_number='о1484ру 161',
+            supported_car_type=1,
+            company=2,
+            api_key=key,
+            status=Workers_status.get(description='working'))
+
+    key = generate_hash('79245687924', rand_str(10))
+    Workers(name='Александр',
+            surname='Солженицын',
+            patronymic='Исаевич',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79245687924',
+            car_number='о1485ру 161',
+            supported_car_type=1,
+            company=2,
+            api_key=key,
+            status=Workers_status.get(description='not working'))
+
+    # ====================|company 3|========================================================
+    key = generate_hash('company3', rand_str(10))
+    Companies(id=3,
+              name='Супер Эвакуатор',
+              description='Дорогая компания',
+              address='Вятская 44',
+              contact_phone='79645589752',
+              email='super_evacuator@gmail.com',
+              min_sum=1500,
+              tariff=200,
+              logo_url='https://image.shutterstock.com/display_pic_with_logo/2539615/285667379/stock-vector--evacuator-icon-vector-285667379.jpg',
+              login='company3',
+              password=generate_password('company3', 'some_salt' + 'qwerty'),
+              api_key=key,
+              sum_rate=0,
+              count_rate=0)
+
+    key = generate_hash('79256431578', rand_str(10))
+    Workers(name='Константин',
+            surname='Новосёлов',
+            patronymic='Сергеевич',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79256431578',
+            car_number='о1486ру 161',
+            supported_car_type=1,
+            company=3,
+            api_key=key,
+            status=Workers_status.get(description='working'))
+
+    key = generate_hash('79245678924', rand_str(10))
+    Workers(name='Пётр',
+            surname='Капица',
+            patronymic='Леонидович',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79245678924',
+            car_number='о1487ру 161',
+            supported_car_type=1,
+            company=3,
+            api_key=key,
+            status=Workers_status.get(description='working'))
+
+    key = generate_hash('79245678928', rand_str(10))
+    Workers(name='Андрей',
+            surname='Гейм',
+            patronymic='Константинович',
+            date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
+            date_of_hire=datetime.now(),
+            phone='79245678928',
+            car_number='о1490ру 161',
+            supported_car_type=1,
+            company=3,
+            api_key=key,
+            status=Workers_status.get(description='not working'))
+    return '', 200

@@ -12,7 +12,7 @@ class SMS_codes(db.Entity):
 
 
 class Clients(db.Entity):
-    name = Required(str, 10)
+    name = Required(str, 15)
     phone = Required(str, 11, unique=True)
     api_key = Required(str, unique=True)
     orders = Set('Orders')
@@ -23,27 +23,27 @@ class Companies(db.Entity):
     description = Required(str, 20)
     address = Required(str, 20)
     contact_phone = Required(str, 11, unique=True)
-    email = Required(str, 15, unique=True)
+    email = Required(str, 25, unique=True)
     min_sum = Required(float)
     tariff = Required(float)
     sum_rate = Required(int)
     count_rate = Required(int)
     logo_url = Required(str, unique=True)
-    login = Required(str, 10, unique=True)
+    login = Required(str, 15, unique=True)
     password = Required(str)
     api_key = Required(str, unique=True)
     workers = Set('Workers')
 
 
 class Workers(db.Entity):
-    name = Required(str, 10)
-    surname = Required(str, 10)
-    patronymic = Optional(str, 10)
+    name = Required(str, 15)
+    surname = Required(str, 15)
+    patronymic = Optional(str, 15)
     date_of_birth = Required(datetime)
     date_of_hire = Required(datetime)
     phone = Required(str, 11, unique=True)
     api_key = Required(str, unique=True)
-    car_number = Required(str, 10, unique=True)
+    car_number = Required(str, 15, unique=True)
     company = Required(Companies)
     status = Required('Workers_status')
     location_history = Set('Workers_location_history')
@@ -86,7 +86,7 @@ class Orders(db.Entity):
 
 
 class Car_type(db.Entity):
-    type_name = Required(str, 20)
+    name = Required(str, 20)
     orders = Set(Orders)
     workers = Set(Workers)
 
