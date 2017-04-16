@@ -6,46 +6,46 @@ db = Database()
 
 
 class SMS_codes(db.Entity):
-    phone = Required(str, unique=True)
+    phone = Required(str, 11, unique=True)
     code = Required(int)
     time_stamp = Required(datetime)
 
 
 class Clients(db.Entity):
     name = Required(str, 10)
-    phone = Required(str, unique=True)
+    phone = Required(str, 11, unique=True)
     api_key = Required(str, unique=True)
     orders = Set('Orders')
 
 
 class Companies(db.Entity):
-    name = Required(str)
-    description = Required(str)
-    address = Required(str)
-    contact_phone = Required(str)
-    email = Required(str, unique=True)
+    name = Required(str, 20)
+    description = Required(str, 20)
+    address = Required(str, 20)
+    contact_phone = Required(str, 11, unique=True)
+    email = Required(str, 15, unique=True)
     min_sum = Required(float)
     tariff = Required(float)
     sum_rate = Required(int)
     count_rate = Required(int)
     logo_url = Required(str, unique=True)
-    login = Required(str, unique=True)
+    login = Required(str, 10, unique=True)
     password = Required(str)
-    workers = Set('Workers')
     api_key = Required(str, unique=True)
+    workers = Set('Workers')
 
 
 class Workers(db.Entity):
-    name = Required(str)
-    surname = Required(str)
-    patronymic = Required(str)
+    name = Required(str, 10)
+    surname = Required(str, 10)
+    patronymic = Optional(str, 10)
     date_of_birth = Required(datetime)
     date_of_hire = Required(datetime)
-    status = Required('Workers_status')
-    phone = Required(str, unique=True)
-    api_key = Required(str,unique=True)
-    car_number = Required(str, unique=True)
+    phone = Required(str, 11, unique=True)
+    api_key = Required(str, unique=True)
+    car_number = Required(str, 10, unique=True)
     company = Required(Companies)
+    status = Required('Workers_status')
     location_history = Set('Workers_location_history')
     last_location = Optional('Workers_last_location')
     orders = Set('Orders')
@@ -53,7 +53,7 @@ class Workers(db.Entity):
 
 
 class Workers_status(db.Entity):
-    description = Required(str)
+    description = Required(str, 10)
     workers = Set(Workers)
 
 
@@ -86,13 +86,13 @@ class Orders(db.Entity):
 
 
 class Car_type(db.Entity):
-    type_name = Required(str)
+    type_name = Required(str, 10)
     orders = Set(Orders)
     workers = Set(Workers)
 
 
 class Orders_status(db.Entity):
-    description = Required(str)
+    description = Required(str, 15)
     orders = Set(Orders)
 
 
