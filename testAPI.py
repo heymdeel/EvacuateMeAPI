@@ -1,10 +1,7 @@
 from flask import Blueprint, jsonify, make_response, request
 from models import *
-import grequests
-import random
-from utils import *
+from utils import rand_str, generate_password, generate_hash
 from datetime import datetime
-from dbhelper import create_company, create_worker
 
 test_api = Blueprint('test_api', __name__)
 
