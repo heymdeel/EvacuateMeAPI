@@ -59,28 +59,28 @@ class Workers_status(db.Entity):
 
 class Workers_location_history(db.Entity):
     worker = Required(Workers)
-    latitude = Required(Decimal)
-    longitude = Required(Decimal)
+    latitude = Required(float)
+    longitude = Required(float)
     time_stamp = Required(datetime)
 
 
 class Workers_last_location(db.Entity):
     worker = PrimaryKey(Workers)
-    latitude = Required(Decimal)
-    longitude = Required(Decimal)
+    latitude = Required(float)
+    longitude = Required(float)
 
 
 class Orders(db.Entity):
     client = Required(Clients)
     worker = Required(Workers)
-    start_client_lat = Required(Decimal)
-    start_client_long = Required(Decimal)
-    start_worker_lat = Required(Decimal)
-    start_worker_long = Required(Decimal)
+    start_client_lat = Required(float)
+    start_client_long = Required(float)
+    start_worker_lat = Required(float)
+    start_worker_long = Required(float)
     beginning_time = Required(datetime)
     termination_time = Optional(datetime)
-    final_lat = Optional(Decimal)
-    final_long = Optional(Decimal)
+    final_lat = Optional(float)
+    final_long = Optional(float)
     status = Required('Orders_status')
     car_type = Required('Car_type')
 
