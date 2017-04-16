@@ -59,6 +59,7 @@ def dangerous_method():
             company=1,
             api_key=key,
             status=Workers_status.get(description='working'))
+    Workers_last_location(worker=Workers.get(phone='79782354687'), latitude=47.29954729, longitude=39.72335458)
 
     key = generate_hash('79247896241', rand_str(10))
     Workers(name='Борис',
@@ -102,6 +103,7 @@ def dangerous_method():
             company=2,
             api_key=key,
             status=Workers_status.get(description='working'))
+    Workers_last_location(worker=Workers.get(phone='79265451223'), latitude=47.30893968, longitude=39.72607434)
 
     key = generate_hash('79652234789', rand_str(10))
     Workers(name='Иван',
@@ -115,6 +117,7 @@ def dangerous_method():
             company=2,
             api_key=key,
             status=Workers_status.get(description='working'))
+    Workers_last_location(worker=Workers.get(phone='79652234789'), latitude=47.32587958, longitude=39.74066019)
 
     key = generate_hash('79245687924', rand_str(10))
     Workers(name='Александр',
@@ -158,6 +161,7 @@ def dangerous_method():
             company=3,
             api_key=key,
             status=Workers_status.get(description='working'))
+    Workers_last_location(worker=Workers.get(phone='79256431578'), latitude=47.30085694, longitude=39.74796653)
 
     key = generate_hash('79245678924', rand_str(10))
     Workers(name='Пётр',
@@ -171,6 +175,7 @@ def dangerous_method():
             company=3,
             api_key=key,
             status=Workers_status.get(description='working'))
+    Workers_last_location(worker=Workers.get(phone='79245678924'), latitude=47.298485, longitude=39.78335023)
 
     key = generate_hash('79245678928', rand_str(10))
     Workers(name='Андрей',
