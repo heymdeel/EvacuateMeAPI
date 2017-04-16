@@ -32,7 +32,7 @@ def generate_password(arg1, arg2):
 
 def renew_code(phone, code):
     SMS_codes.get(lambda s: s.phone == phone and s.code == code).delete()
-    api_key = generate_hash(code, phone)
+    api_key = generate_hash(phone, rand_str(10))
     return api_key
 
 
