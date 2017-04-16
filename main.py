@@ -1,10 +1,12 @@
 import os
 from flask import Flask
 from loginAPI import login_api
+from testAPI import test_api
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from utils import clean_sms_codes
+
 
 scheduler = BackgroundScheduler()
 scheduler.start()
@@ -17,6 +19,7 @@ scheduler.add_job(
 
 app = Flask(__name__)
 app.register_blueprint(login_api)
+app.register_blueprint(test_api)
 atexit.register(lambda: scheduler.shutdown())
 
 
