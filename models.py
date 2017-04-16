@@ -53,7 +53,7 @@ class Workers(db.Entity):
 
 
 class Workers_status(db.Entity):
-    description = Required(str, 10)
+    description = Required(str, 20)
     workers = Set(Workers)
 
 
@@ -86,13 +86,13 @@ class Orders(db.Entity):
 
 
 class Car_type(db.Entity):
-    type_name = Required(str, 10)
+    type_name = Required(str, 20)
     orders = Set(Orders)
     workers = Set(Workers)
 
 
 class Orders_status(db.Entity):
-    description = Required(str, 15)
+    description = Required(str, 20)
     orders = Set(Orders)
 
 
