@@ -26,7 +26,7 @@ def change_status(new_status):
     return 'status successfully changed to ' + Workers_status.get(id=new_status).description, 200
 
 
-@worker_api.route('/api/workers/orders')
+@worker_api.route('/api/workers/orders') #check for actual orders
 @db_session
 def check_for_orders():
     if 'api_key' not in request.headers:
