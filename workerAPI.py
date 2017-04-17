@@ -5,7 +5,7 @@ from datetime import datetime
 worker_api = Blueprint('worker_api', __name__)
 
 
-@worker_api.route('/api/workers/status/<string:new_status>', methods=['PUT']) #change worker's status
+@worker_api.route('/api/workers/status/<int:new_status>', methods=['PUT']) #change worker's status
 @db_session
 def change_status(new_status):
     if 'api_key' not in request.headers:
@@ -82,7 +82,7 @@ def send_location():
     return 'Location was successfully saved', 200
 
 
-@worker_api.route('/api/workers/<int:id>/location/history') # get worker's location history
+@worker_api.route('/api/workers/<int:id>/location/history') #get worker's location history
 @db_session
 def get_location_history(id):
     if 'api_key' not in request.headers:
