@@ -54,3 +54,9 @@ def list_of_companies():
 
     companies.sort(key=lambda x: x['closest_distance'])
     return jsonify(companies), 200
+
+
+@order_api.route('/api/orders/<int:id>')
+@db_session
+def change_order_status(id):
+    return '', 200

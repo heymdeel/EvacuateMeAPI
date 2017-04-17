@@ -6,7 +6,7 @@ from datetime import datetime
 database_api = Blueprint('database_api', __name__)
 
 
-@database_api.route('/api/car_types')
+@database_api.route('/api/car_types') #get list of car types
 @db_session
 def get_car_types():
     car_types = Car_type.select()[:]
@@ -20,7 +20,9 @@ def get_car_types():
     return jsonify(result), 200
 
 #==========================|DANGEROUS ZONE|=============================================================================
-@database_api.route('/api/database/seed')
+
+
+@database_api.route('/api/database/seed') #database seed
 @db_session
 def dangerous_method():
     Car_type(name='Легковая')
