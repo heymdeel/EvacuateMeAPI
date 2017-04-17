@@ -69,7 +69,13 @@ def send_location():
 
     try:
         Workers_location_history(worker=worker, latitude=new_latitude, longitude=new_longitude, time_stamp=datetime.now())
-        Workers_last_location.get(worker=worker).set(latitude=new_latitude, longitude=new_longitude)
+        last_location = Workers_last_location.get(worker=worker)
+
+        if last_location is None:
+            Workers_last_location(worker=worker, latitude=new_latitude, longitude=new_longitude)
+        else:
+            last_location.set(latitude=new_latitude, longitude=new_longitude)
+
     except Exception as e:
         return 'Failed to save location. Error message: ' + str(e), 400
 
