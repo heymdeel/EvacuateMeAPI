@@ -6,7 +6,7 @@ from datetime import datetime
 order_api = Blueprint('order_api', __name__)
 
 
-@order_api.route('/api/help/companies', methods=['POST'])
+@order_api.route('/api/help/companies', methods=['POST']) #get list of companies for client
 @db_session
 def list_of_companies():
     if 'api_key' not in request.headers:
@@ -57,7 +57,7 @@ def list_of_companies():
     return jsonify(companies), 200
 
 
-@order_api.route('/api/orders', methods=['POST'])
+@order_api.route('/api/orders', methods=['POST']) #add order to the database
 @db_session
 def create_order():
     if 'api_key' not in request.headers:
