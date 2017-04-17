@@ -46,3 +46,8 @@ def check_for_orders():
     client_info['phone'] = order.client.phone
 
     return jsonify(client_info), 200
+
+@worker_api.route('/api/kek')
+@db_session
+def kek():
+    return  '', 200
