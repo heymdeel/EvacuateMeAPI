@@ -13,12 +13,14 @@ def dangerous_method():
     Car_type(name='Грузовая')
     Workers_status(id=0, description='not working')
     Workers_status(id=1, description='working')
+    Workers_status(id=2, description='performing order')
     Orders_status(id=0, description='awaiting')
     Orders_status(id=1, description='on the way')
     Orders_status(id=2, description='performing')
     Orders_status(id=3, description='completed')
     Orders_status(id=4, description='canceled by client')
     Orders_status(id=5, description='canceled by worker')
+
     #====================|company 1|========================================================
     key = generate_hash('company1', rand_str(10))
     Companies(id=1,
