@@ -44,11 +44,12 @@ def check_for_orders():
     client_info['latitude'] = order.start_client_lat
     client_info['longitude'] = order.start_client_long
     client_info['phone'] = order.client.phone
+    client_info['order_id'] = order.id
 
     return jsonify(client_info), 200
 
 
-@worker_api.route('/api/workers/location', methods=['PUT'])
+@worker_api.route('/api/workers/location', methods=['PUT']) #change worker location
 @db_session
 def send_location():
     if 'api_key' not in request.headers:
@@ -75,7 +76,7 @@ def send_location():
     return 'Location was successfully saved', 200
 
 
-@worker_api.route('/api/workers/<int:id>/location/history')
+@worker_api.route('/api/workers/<int:id>/location/history') # get worker's location history
 @db_session
 def get_location_history(id):
     if 'api_key' not in request.headers:
