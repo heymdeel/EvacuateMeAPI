@@ -48,7 +48,7 @@ def check_for_orders():
     return jsonify(client_info), 200
 
 
-@worker_api.route('/api/workers/coordinates', methods=['PUT'])
+@worker_api.route('/api/workers/location', methods=['PUT'])
 @db_session
 def send_coordinates():
     if 'api_key' not in request.headers:
