@@ -9,12 +9,6 @@ def rand_str(length):
     return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
 
 
-def client_key_is_valid(req):
-    if 'key' in req.headers and Clients.exists(lambda c: c.api_key.key == req.headers['key']):
-        return True
-    return False
-
-
 def validate_phone(phone):
     if not (re.match(r'[7-8][0-9]{10}', phone) and len(phone) == 11):
         return False
@@ -38,7 +32,7 @@ def generate_password(arg1, arg2):
 
 def renew_code(phone, code):
     SMS_codes.get(lambda s: s.phone == phone and s.code == code).delete()
-    api_key = generate_hash(code, phone)
+    api_key = generate_hash(phone, rand_str(10))
     return api_key
 
 

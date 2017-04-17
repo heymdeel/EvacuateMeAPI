@@ -1,10 +1,7 @@
-from flask import Blueprint, jsonify, make_response, request
+from flask import Blueprint
 from models import *
-import grequests
-import random
-from utils import *
+from utils import rand_str, generate_password, generate_hash
 from datetime import datetime
-from dbhelper import create_company, create_worker
 
 test_api = Blueprint('test_api', __name__)
 
@@ -16,7 +13,12 @@ def dangerous_method():
     Car_type(name='Грузовая')
     Workers_status(id=0, description='not working')
     Workers_status(id=1, description='working')
-
+    Orders_status(id=0, description='awaiting')
+    Orders_status(id=1, description='on the way')
+    Orders_status(id=2, description='performing')
+    Orders_status(id=3, description='completed')
+    Orders_status(id=4, description='canceled by client')
+    Orders_status(id=5, description='canceled by worker')
     #====================|company 1|========================================================
     key = generate_hash('company1', rand_str(10))
     Companies(id=1,
