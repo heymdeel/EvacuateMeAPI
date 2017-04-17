@@ -50,7 +50,7 @@ def check_for_orders():
 
 @worker_api.route('/api/workers/location', methods=['PUT'])
 @db_session
-def send_coordinates():
+def send_location():
     if 'api_key' not in request.headers:
         return 'Access refused! Need authorization via api_key', 401
 
@@ -73,3 +73,28 @@ def send_coordinates():
         return 'Failed to save location. Error message: ' + str(e), 400
 
     return 'Location was successfully saved', 200
+
+
+@worker_api.route('/api/workers/<int:id>/location/history')
+@db_session
+def get_location_history(id):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    company = Companies.get(api_key=request.headers['api_key'])
+    if company is None:
+        return 'Access refused! api_key is wrong', 401
+
+    worker = Workers.get(id=id)
+    if worker not in company.workers:
+        return 'There is no such worker in this company', 404
+
+    location_history = Workers_location_history.select(lambda w: w.worker == worker)[:]
+    if location_history is None:
+        return 'There is no location history for this worker', 404
+
+    result = []
+    for i in location_history:
+        result.append(i.to_dict(exclude=['worker', 'id']))
+
+    return jsonify(result), 200
