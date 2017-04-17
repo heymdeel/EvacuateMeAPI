@@ -1,24 +1,40 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from models import *
 from utils import rand_str, generate_password, generate_hash
 from datetime import datetime
 
-test_api = Blueprint('test_api', __name__)
+database_api = Blueprint('database_api', __name__)
 
 
-@test_api.route('/api/database/seed')
+@database_api.route('/api/car_types')
+@db_session
+def get_car_types():
+    car_types = Car_type.select()[:]
+    if car_types is None:
+        return 'There is no car types in database', 404
+
+    result = []
+    for i in car_types:
+        result.append(i.to_dict())
+
+    return jsonify(result), 200
+
+#==========================|DANGEROUS ZONE|=============================================================================
+@database_api.route('/api/database/seed')
 @db_session
 def dangerous_method():
     Car_type(name='Легковая')
     Car_type(name='Грузовая')
     Workers_status(id=0, description='not working')
     Workers_status(id=1, description='working')
+    Workers_status(id=2, description='performing order')
     Orders_status(id=0, description='awaiting')
     Orders_status(id=1, description='on the way')
     Orders_status(id=2, description='performing')
     Orders_status(id=3, description='completed')
     Orders_status(id=4, description='canceled by client')
     Orders_status(id=5, description='canceled by worker')
+
     #====================|company 1|========================================================
     key = generate_hash('company1', rand_str(10))
     Companies(id=1,
