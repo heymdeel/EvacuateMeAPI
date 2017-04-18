@@ -47,6 +47,7 @@ def list_of_companies():
 
             company['closest_distance'] = distance
             company['closest_duration'] = duration
+            company['closest_worker_id'] = worker.id
             companies.append(company)
 
     if not companies:
@@ -71,6 +72,10 @@ def create_order():
     client_long = req_json['longitude']
     client_car_type = req_json['car_type']
     company_id = req_json['company_id']
+    worker_id = req_json['worker_id']
+
+    if Workers.get(id=worker_id).status.id != 0:
+        return 'worker is busy', 404
 
     workers = Companies.get(id=company_id).workers.select(lambda w: w.status.id == 1 and w.supported_car_type.id == client_car_type)[:]
 

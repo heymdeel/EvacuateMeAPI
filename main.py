@@ -10,7 +10,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 from utils import clean_sms_codes
 
 
-#TODO: car_types authorization, workers order history
+#TODO: car_types authorization, workers order history, car types in database seed
 
 
 scheduler = BackgroundScheduler()
