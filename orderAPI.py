@@ -127,7 +127,7 @@ def change_order_status(order_id, new_status):
         if order.client != user:
             return 'Bad user', 400
 
-        if order.id in ['0', '1'] and new_status == 5:
+        if order.status.id in [0, 1] and new_status == 5:
             order.status.id = new_status
             return 'status successfully changed to canceled by user', 200
 
@@ -136,8 +136,8 @@ def change_order_status(order_id, new_status):
         if order.worker != user:
             return 'Bad worker', 400
 
-        if (order.status == 0 and new_status in ['1', '4']) or (order.status == 1 and new_status in ['2', '4']) \
-                or (order.status == 2 and new_status == 3):
+        if (order.status.id == 0 and new_status in [1, 4]) or (order.status.id == 1 and new_status in [2, 4]) \
+                or (order.status.id == 2 and new_status == 3):
             order.status.id = new_status
             return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
 
