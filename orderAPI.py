@@ -38,8 +38,7 @@ def list_of_companies():
                 break
 
         if not company_in_list: #add new company to list
-            company = worker.company.to_dict(exclude=['login', 'password', 'address', 'contact_phone', 'email',
-                                                      'api_key', 'sum_rate', 'count_rate'])
+            company = worker.company.to_dict(exclude=['login', 'password', 'api_key', 'sum_rate', 'count_rate'])
 
             if worker.company.count_rate != 0:
                 company['rate'] = worker.company.sum_rate / worker.company.count_rate
