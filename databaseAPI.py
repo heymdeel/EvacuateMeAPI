@@ -34,8 +34,8 @@ def dangerous_method():
     Orders_status(id=1, description='on the way')
     Orders_status(id=2, description='performing')
     Orders_status(id=3, description='completed')
-    Orders_status(id=4, description='canceled by client')
-    Orders_status(id=5, description='canceled by worker')
+    Orders_status(id=4, description='canceled by worker')
+    Orders_status(id=5, description='canceled by client')
 
     #====================|company 1|========================================================
     key = generate_hash('company1', rand_str(10))

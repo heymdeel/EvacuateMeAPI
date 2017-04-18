@@ -107,4 +107,38 @@ def create_order():
     response['longitude'] = worker_location.longitude
     response['phone'] = closest_worker.phone
 
-    return jsonify(response), 200
+    return jsonify(response), 201
+
+
+@order_api.route('/api/orders/<int:order_id>/status/<int:new_status>', methods=['PUT']) #change order status
+@db_session
+def change_order_status(order_id, new_status):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    order = Orders.get(id=order_id)
+    if order is None:
+        return 'There is no order with such id', 404
+
+    api_key = request.headers['api_key']
+
+    user = Clients.get(api_key=api_key)
+    if user is not None:
+        if order.client != user:
+            return 'Bad user', 400
+
+        if order.id in ['0', '1'] and new_status == 5:
+            order.status.id = new_status
+            return 'status successfully changed to canceled by user', 200
+
+    user = Workers.get(api_key=api_key)
+    if user is not None:
+        if order.worker != user:
+            return 'Bad worker', 400
+
+        if (order.status == 0 and new_status in ['1', '4']) or (order.status == 1 and new_status in ['2', '4']) \
+                or (order.status == 2 and new_status == 3):
+            order.status.id = new_status
+            return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
+
+    return 'Refused! wrong api_key', 401
