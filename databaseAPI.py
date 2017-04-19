@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from models import *
 from utils import rand_str, generate_password, generate_hash
 from datetime import datetime
@@ -9,6 +9,12 @@ database_api = Blueprint('database_api', __name__)
 @database_api.route('/api/car_types') #get list of car types
 @db_session
 def get_car_types():
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    if not Clients.exists(lambda c: c.api_key == request.headers['api_key']):
+        return 'Access refused! api_key is wrong', 401
+
     car_types = Car_type.select()[:]
     if car_types is None:
         return 'There is no car types in database', 404
@@ -25,8 +31,10 @@ def get_car_types():
 @database_api.route('/api/database/seed') #database seed
 @db_session
 def dangerous_method():
-    Car_type(name='Легковая')
-    Car_type(name='Грузовая')
+    Car_type(id=1, name='Легковая')
+    Car_type(id=2, name='Внедорожник')
+    Car_type(id=3, name='Грузовая до 3.5 тонн')
+    Car_type(id=4, name='Грузовая больше 3.5 тонн')
     Workers_status(id=0, description='not working')
     Workers_status(id=1, description='working')
     Workers_status(id=2, description='performing order')
@@ -36,7 +44,6 @@ def dangerous_method():
     Orders_status(id=3, description='completed')
     Orders_status(id=4, description='canceled by worker')
     Orders_status(id=5, description='canceled by client')
-
     #====================|company 1|========================================================
     key = generate_hash('company1', rand_str(10))
     Companies(id=1,
@@ -55,7 +62,8 @@ def dangerous_method():
               count_rate=0)
 
     key = generate_hash('79613202176', rand_str(10))
-    Workers(name='Иван',
+    Workers(id=1,
+            name='Иван',
             surname='Павлов',
             patronymic='Петрович',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -68,7 +76,8 @@ def dangerous_method():
             status=Workers_status.get(description='not working'))
 
     key = generate_hash('79782354687', rand_str(10))
-    Workers(name='Андрей',
+    Workers(id=2,
+            name='Андрей',
             surname='Сахаров',
             patronymic='Дмитриевич',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -82,7 +91,8 @@ def dangerous_method():
     Workers_last_location(worker=Workers.get(phone='79782354687'), latitude=47.29954729, longitude=39.72335458)
 
     key = generate_hash('79247896241', rand_str(10))
-    Workers(name='Борис',
+    Workers(id=3,
+            name='Борис',
             surname='Пастернак',
             patronymic='Леонидович',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -112,7 +122,8 @@ def dangerous_method():
               count_rate=0)
 
     key = generate_hash('79265451223', rand_str(10))
-    Workers(name='Виталий',
+    Workers(id=4,
+            name='Виталий',
             surname='Гинзбург',
             patronymic='Лазаревич',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -126,7 +137,8 @@ def dangerous_method():
     Workers_last_location(worker=Workers.get(phone='79265451223'), latitude=47.30893968, longitude=39.72607434)
 
     key = generate_hash('79652234789', rand_str(10))
-    Workers(name='Иван',
+    Workers(id=5,
+            name='Иван',
             surname='Бунин',
             patronymic='Алексеевич',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -140,7 +152,8 @@ def dangerous_method():
     Workers_last_location(worker=Workers.get(phone='79652234789'), latitude=47.32587958, longitude=39.74066019)
 
     key = generate_hash('79245687924', rand_str(10))
-    Workers(name='Александр',
+    Workers(id=6,
+            name='Александр',
             surname='Солженицын',
             patronymic='Исаевич',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -170,7 +183,8 @@ def dangerous_method():
               count_rate=0)
 
     key = generate_hash('79256431578', rand_str(10))
-    Workers(name='Константин',
+    Workers(id=7,
+            name='Константин',
             surname='Новосёлов',
             patronymic='Сергеевич',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -184,7 +198,8 @@ def dangerous_method():
     Workers_last_location(worker=Workers.get(phone='79256431578'), latitude=47.30085694, longitude=39.74796653)
 
     key = generate_hash('79245678924', rand_str(10))
-    Workers(name='Пётр',
+    Workers(id=8,
+            name='Пётр',
             surname='Капица',
             patronymic='Леонидович',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -198,7 +213,8 @@ def dangerous_method():
     Workers_last_location(worker=Workers.get(phone='79245678924'), latitude=47.298485, longitude=39.78335023)
 
     key = generate_hash('79245678928', rand_str(10))
-    Workers(name='Андрей',
+    Workers(id=9,
+            name='Андрей',
             surname='Гейм',
             patronymic='Константинович',
             date_of_birth=datetime.strptime('26-Sep-1849', "%d-%b-%Y"),
@@ -209,4 +225,5 @@ def dangerous_method():
             company=3,
             api_key=key,
             status=Workers_status.get(description='not working'))
+
     return '', 200
