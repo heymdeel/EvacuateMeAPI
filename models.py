@@ -80,12 +80,13 @@ class Orders(db.Entity):
     termination_time = Optional(datetime)
     final_lat = Optional(float)
     final_long = Optional(float)
+    commentary = Optional(str, 50)
     status = Required('Orders_status')
     car_type = Required('Car_type')
 
 
 class Car_type(db.Entity):
-    name = Required(str, 20)
+    name = Required(str, 30)
     orders = Set(Orders)
     workers = Set(Workers)
 
