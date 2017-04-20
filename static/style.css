@@ -59,16 +59,6 @@ aside > * {
     color: white;
 }
 
-.kek {
-    width: 90%;
-    text-decoration: none;
-    list-style-position: inside;
-    font: 14px 'Oswald', sans-serif;
-    padding: 10px;
-    font-weight: 300;
-    border-top: 1px solid #e7e7e7;
-}
-
 nav a {
     text-decoration: none;
 }

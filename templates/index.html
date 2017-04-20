@@ -1,71 +1,22 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title> {{ title }}</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{url_for('static', filename='Oswald.css') }}" type="text/css">
-</head>
-<body>
-    <div class="wrapper">
-        <header>
-            
-        </header>
+﻿{% extends "layout.html" %}
+{% block body %}
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi cursus tortor ante, sagittis sagittis nunc tristique id. Cras mauris dolor, sagittis a malesuada vel, commodo eget nunc. Curabitur ultricies fringilla ipsum, non iaculis diam suscipit a. Phasellus lectus nibh, faucibus at ornare at, tristique non velit. Vestibulum quis ornare augue. Etiam porttitor felis dictum pellentesque congue. Nam sit amet ligula imperdiet, porttitor mauris quis, dignissim enim. Sed finibus massa feugiat mi ultrices imperdiet. Suspendisse ultrices egestas lacus ut lacinia. Integer convallis lorem at euismod fringilla. Sed eu metus tincidunt ligula rhoncus vehicula.
+    </p>
 
-        <content>
-            <div id="heading">
-                <h1>{{title}}</h1>
-            </div>
+    <p>
+        Vestibulum vel pulvinar nunc, vitae gravida ipsum. Cras tristique ut velit sed feugiat. Suspendisse in lacinia neque. Vestibulum in luctus elit. Maecenas quis dapibus nunc. Cras lobortis libero a ipsum sodales eleifend. Donec a nisl condimentum, blandit nunc et, convallis velit.
+    </p>
 
-            <aside>
-                <div class="login">
-                    <form action="/login" method="POST">
-                        <input type="text" name="login" placeholder="Логин" value="" class="inputValue">
-                        <input type="password" name="passwd" placeholder="Пароль" value="" class="inputValue">
-                        <input type="hidden" name ="redirect_url" value="@Request.Url.AbsoluteUri" />
-                        <input type="submit" value="Войти">
-                    </form>
-                </div>
+    <p>
+        Nulla pretium nunc at tortor cursus luctus. Vestibulum sed felis metus. Nulla tempor lectus id augue sollicitudin, interdum molestie nunc fringilla. Pellentesque sagittis justo id augue gravida auctor id mattis tellus. Vestibulum at congue purus. Donec dapibus tristique diam, id dignissim quam molestie a. Mauris commodo maximus arcu ut tempus. Vivamus fringilla libero vel neque bibendum, sit amet vulputate elit ornare. Sed et felis enim. Curabitur sit amet venenatis nibh. Maecenas sagittis a risus in rutrum. Aliquam nec nisl quis lorem feugiat semper in vel sapien.
+    </p>
 
-                <nav>
-                    <ul class="aside-menu">
-                        <li class="active")> Главная </li>
-                        <li><a href=@b.Value>Меню2</a></li>
-                        <li><a href=@b.Value>Меню3</a></li>
-                        <li><a href=@b.Value>Меню4</a></li>
-                        <li><a href=@b.Value>Меню5</a></li>
-                    </ul>
-                </nav>
-            </aside>
-            
-            <div id="main">
-                <p>Some text</p>
-            </div>
-        </content>
+    <p>
+        Vestibulum sed orci enim. Phasellus viverra ultricies ipsum blandit dapibus. Morbi in facilisis urna. Maecenas elementum diam sit amet turpis tincidunt placerat. Fusce justo ante, pretium ut odio vitae, viverra placerat dui. Praesent id dolor velit. Ut vulputate tempus dui eget euismod. Curabitur vel justo ut orci semper lobortis. Aenean a ultricies mauris. Nullam tristique erat et justo vestibulum ultricies. Etiam vehicula, nisi at suscipit ornare, quam arcu fringilla mauris, vitae pellentesque massa dui nec mi. Maecenas justo nunc, tincidunt ac quam nec, ullamcorper tincidunt risus.
+    </p>
 
-        <footer>
-            <div id="twitter">
-                <h3>TWITTER FEED</h3>
-                <time datetime="2016-12-23"><a href="#">23 dec</a></time>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore vero, odit velit, obcaecati voluptatibus perspiciatis optio doloremque. Corporis id vel n</p>
-            </div>
-            <div id="social">
-                <h3>SOCIAL NETWORKS</h3>
-                <a href="http://twitter.com/" class="social-icon twitter"></a>
-                <a href="http://facebook.com/" class="social-icon facebook"></a>
-                <a href="http://plus.google.com/" class="social-icon google-plus"></a>
-                <a href="http://vimeo.com/" class="social-icon-small vimeo"></a>
-                <a href="http://youtube.com/" class="social-icon-small youtube"></a>
-                <a href="http://flickr.com/" class="social-icon-small flickr"></a>
-                <a href="http://instagram.com/" class="social-icon-small instagram"></a>
-                <a href="/rss/" class="social-icon-small rss"></a>
-            </div>
-            <div id="footer-logo">
-                <a href="/"><img src="images/logo.png" alt="logo"></a>
-                <p>Copyright &copy; 2017 Hackathon. A bomj team creation </p>
-            </div>
-        </footer>
-    </div>
-</body>
-</html>
+    <p>
+        Sed elementum lectus ac rhoncus luctus. Donec vel nisl eleifend, dictum urna sit amet, consectetur nibh. Ut molestie nisi sit amet facilisis consequat. Quisque tellus justo, sagittis at sodales non, ullamcorper ac turpis. Etiam iaculis non justo ut maximus. Integer posuere faucibus felis a volutpat. Aenean fringilla turpis volutpat metus condimentum varius. 
+    </p>  
+{% endblock %}

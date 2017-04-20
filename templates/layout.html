@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title> {{ title }}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{url_for('static', filename='Oswald.css') }}" type="text/css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            
+        </header>
+
+        <content>
+            <div id="heading">
+                <h1>{{page}}</h1>
+            </div>
+
+            <aside>
+                <div class="login">
+                    {% if not session.loged_in %}
+                        <form action="/login" method="POST">
+                            <input type="text" name="login" placeholder="Логин" value="" class="inputValue">
+                            <input type="password" name="passwd" placeholder="Пароль" value="" class="inputValue">
+                            <input type="hidden" name ="redirect_url" value="@Request.Url.AbsoluteUri" />
+                            <input type="submit" value="Войти">
+                        </form>
+                    {% else %}
+                        <p>Вы авторизованы как bomj</p>
+                        <form action="/logout" method="POST">
+                            <input type="hidden" name="redirect_url" value="@Request.Url.AbsoluteUri" />
+                            <input type="submit" value="Выйти">
+                        </form>
+                    {% endif %}
+                </div>
+
+                <nav>
+                    <ul class="aside-menu">
+                    {% for key, value in categories.items() %}
+                      {% if key == page %}
+                        <li class="active")> {{ key }} </li>
+                      {% else %}
+                        <li><a href={{value}}> {{key}} </a></li>
+                      {% endif %}
+                    {% endfor %}
+                    </ul>
+                </nav>
+            </aside>
+            
+            <div id="main">
+            {% block body %}{% endblock %}
+                
+            </div>
+        </content>
+
+        <footer>
+            <div id="twitter">
+                <h3>TWITTER FEED</h3>
+                <time datetime="2016-12-23"><a href="#">23 dec</a></time>
+                
+            </div>
+            <div id="social">
+                <h3>SOCIAL NETWORKS</h3>
+                <a href="http://twitter.com/" class="social-icon twitter"></a>
+                <a href="http://facebook.com/" class="social-icon facebook"></a>
+                <a href="http://plus.google.com/" class="social-icon google-plus"></a>
+                <a href="http://vimeo.com/" class="social-icon-small vimeo"></a>
+                <a href="http://youtube.com/" class="social-icon-small youtube"></a>
+                <a href="http://flickr.com/" class="social-icon-small flickr"></a>
+                <a href="http://instagram.com/" class="social-icon-small instagram"></a>
+                <a href="/rss/" class="social-icon-small rss"></a>
+            </div>
+            <div id="footer-logo">
+                <a href="/"><img src="{{url_for('static', filename='images/logo.png')}}" alt="logo"></a>
+                <p>Copyright &copy; 2017 Hackathon. A bomj team creation </p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

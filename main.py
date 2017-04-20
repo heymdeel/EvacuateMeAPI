@@ -1,9 +1,10 @@
 import os
-from flask import Flask, render_template
+from flask import Flask
 from loginAPI import login_api
 from databaseAPI import database_api
 from workerAPI import worker_api
 from orderAPI import order_api
+from web_site import web_site
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -27,12 +28,18 @@ app.register_blueprint(login_api)
 app.register_blueprint(database_api)
 app.register_blueprint(worker_api)
 app.register_blueprint(order_api)
+app.register_blueprint(web_site)
 atexit.register(lambda: scheduler.shutdown())
 
 
-@app.route('/')
-def start():
-    return render_template('index.html', title='Kek')
+@app.context_processor
+def get_categories():
+    categories = {}
+    categories['Главная'] = '/'
+    categories['Компании'] = '/companies'
+    categories['О нас'] = '/about'
+
+    return dict(categories=categories)
 
 
 if __name__ == '__main__':
