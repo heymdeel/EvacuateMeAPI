@@ -26,7 +26,7 @@ def generate_hash(arg1, arg2):
 
 
 def generate_password(arg1, arg2):
-    hash_pass = hashlib.sha512(str(arg1).encode() + str(arg2).encode())
+    hash_pass = hashlib.sha512(str(arg1).encode() + str('some_salt' + arg2).encode())
     return str(hash_pass.hexdigest())
 
 

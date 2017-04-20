@@ -56,7 +56,7 @@ def dangerous_method():
               tariff=100,
               logo_url='https://raw.githubusercontent.com/reactjs/redux/master/logo/logo.png',
               login='company1',
-              password=generate_password('company1', 'some_salt' + 'qwerty'),
+              password=generate_password('company1', 'qwerty'),
               api_key=key,
               sum_rate=0,
               count_rate=0)
@@ -116,7 +116,7 @@ def dangerous_method():
               tariff=150,
               logo_url='https://thumb7.shutterstock.com/display_pic_with_logo/3799943/566679331/stock-vector-evacuator-car-icon-isolated-on-white-background-evacuator-vector-logo-flat-design-style-modern-566679331.jpg',
               login='company2',
-              password=generate_password('company2', 'some_salt' + 'qwerty'),
+              password=generate_password('company2', 'qwerty'),
               api_key=key,
               sum_rate=0,
               count_rate=0)
@@ -177,7 +177,7 @@ def dangerous_method():
               tariff=200,
               logo_url='https://image.shutterstock.com/display_pic_with_logo/2539615/285667379/stock-vector--evacuator-icon-vector-285667379.jpg',
               login='company3',
-              password=generate_password('company3', 'some_salt' + 'qwerty'),
+              password=generate_password('company3', 'qwerty'),
               api_key=key,
               sum_rate=0,
               count_rate=0)
