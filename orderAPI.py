@@ -47,6 +47,7 @@ def list_of_companies():
 
             company['closest_distance'] = distance
             company['closest_duration'] = duration
+            company['closest_worker_id'] = worker.id
             companies.append(company)
 
     if not companies:
@@ -70,41 +71,30 @@ def create_order():
     client_lat = req_json['latitude']
     client_long = req_json['longitude']
     client_car_type = req_json['car_type']
-    company_id = req_json['company_id']
+    company = Companies.get(id=req_json['company_id'])
+    worker = Workers.get(id=req_json['worker_id'])
+    commentary = req_json['commentary']
 
-    workers = Companies.get(id=company_id).workers.select(lambda w: w.status.id == 1 and w.supported_car_type.id == client_car_type)[:]
+    if worker not in company.workers:
+        return '', 400
 
-    if workers is None:
-        return 'There are no free workers of this company', 404
+    if worker.status.id != 1:
+        return 'worker is busy', 404
 
-    worker_location = Workers_last_location.get(worker=workers[0])
-    result = make_request_to_google(client_lat, client_long, worker_location.latitude, worker_location.longitude)
-    min_distance = get_distance(result)
-    closest_worker = workers[0]
-
-    for worker in workers:
-        worker_location = Workers_last_location.get(worker=worker)
-        result = make_request_to_google(client_lat, client_long, worker_location.latitude, worker_location.longitude)
-        distance = get_distance(result)
-
-        if distance < min_distance:
-            min_distance = distance
-            closest_worker = worker
-
-    worker_location = Workers_last_location.get(worker=closest_worker)
-    order = Orders(client=Clients.get(api_key=api_key), worker=closest_worker, start_client_lat=client_lat,
+    worker_location = Workers_last_location.get(worker=worker)
+    order = Orders(client=Clients.get(api_key=api_key), worker=worker, start_client_lat=client_lat,
                    start_client_long=client_long, start_worker_lat=worker_location.latitude,
                    start_worker_long=worker_location.longitude, beginning_time=datetime.now(),
-                   car_type=client_car_type, status=0)
+                   car_type=client_car_type, status=0, commentary=commentary)
     commit()
 
     response = {}
     response['oder_id'] = order.id
-    response['name'] = closest_worker.name
-    response['surname'] = closest_worker.surname
+    response['name'] = worker.name
+    response['surname'] = worker.surname
     response['latitude'] = worker_location.latitude
     response['longitude'] = worker_location.longitude
-    response['phone'] = closest_worker.phone
+    response['phone'] = worker.phone
 
     return jsonify(response), 201
 
@@ -126,18 +116,22 @@ def change_order_status(order_id, new_status):
         if order.client != user:
             return 'Bad user', 400
 
-        if order.id in ['0', '1'] and new_status == 5:
-            order.status.id = new_status
+        if order.status.id in [0, 1] and new_status == 5:
+            order.status = new_status
             return 'status successfully changed to canceled by user', 200
+
+        return 'bad status', 400
 
     user = Workers.get(api_key=api_key)
     if user is not None:
         if order.worker != user:
             return 'Bad worker', 400
 
-        if (order.status == 0 and new_status in ['1', '4']) or (order.status == 1 and new_status in ['2', '4']) \
-                or (order.status == 2 and new_status == 3):
-            order.status.id = new_status
+        if (order.status.id == 0 and new_status in [1, 4]) or (order.status.id == 1 and new_status in [2, 4]) \
+                or (order.status.id == 2 and new_status == 3):
+            order.status = new_status
             return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
+
+        return 'bad status', 400
 
     return 'Refused! wrong api_key', 401
