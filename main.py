@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from loginAPI import login_api
 from databaseAPI import database_api
 from workerAPI import worker_api
@@ -32,7 +32,7 @@ atexit.register(lambda: scheduler.shutdown())
 
 @app.route('/')
 def start():
-    return 'Hello from DCP team'
+    return render_template('index.html', title='Kek')
 
 
 if __name__ == '__main__':
