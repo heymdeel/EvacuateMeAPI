@@ -89,9 +89,8 @@ def create_order():
     commit()
 
     response = {}
-    response['oder_id'] = order.id
+    response['order_id'] = order.id
     response['name'] = worker.name
-    response['surname'] = worker.surname
     response['latitude'] = worker_location.latitude
     response['longitude'] = worker_location.longitude
     response['phone'] = worker.phone
