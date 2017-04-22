@@ -135,3 +135,32 @@ def change_order_status(order_id, new_status):
         return 'bad status', 400
 
     return 'Refused! wrong api_key', 401
+
+
+@order_api.route('/api/orders/<int:order_id>/status')
+@db_session
+def get_order_status(order_id):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    order = Orders.get(id=order_id)
+    if order is None:
+        return 'There is no order with such id', 404
+
+    api_key = request.headers['api_key']
+
+    user = Clients.get(api_key=api_key)
+    if user is not None:
+        if order.client != user:
+            return 'Bad user', 400
+
+        return jsonify(order.status.to_dict()), 200
+
+    user = Workers.get(api_key=api_key)
+    if user is not None:
+        if order.worker != user:
+            return 'Bad worker', 400
+
+        return jsonify(order.status.to_dict()), 200
+
+    return 'Refused! wrong api_key', 401
