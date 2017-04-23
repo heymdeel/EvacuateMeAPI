@@ -53,6 +53,9 @@ def clients_sign_up():
     if not validate_phone(req['phone']):
         return 'Bad phone format', 400
 
+    if Clients.exists(phone=req['phone']):
+        return 'User with this phone already exists', 400
+
     if SMS_codes.exists(lambda s: s.phone == req['phone'] and s.code == req['code']):
         new_key = renew_code(req['phone'], req['code'])
         Clients(name=req['name'], phone=req['phone'], api_key=new_key)

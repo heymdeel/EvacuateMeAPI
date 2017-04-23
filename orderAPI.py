@@ -51,7 +51,7 @@ def list_of_companies():
             companies.append(company)
 
     if not companies:
-        return '', 404
+        return 'Can\'t find matching companies', 404
 
     companies.sort(key=lambda x: x['closest_distance'])
     return jsonify(companies), 200
@@ -76,7 +76,7 @@ def create_order():
     commentary = req_json['commentary']
 
     if worker not in company.workers:
-        return '', 400
+        return 'Bad worker id', 400
 
     if worker.status.id != 1:
         return 'worker is busy', 404
@@ -117,6 +117,7 @@ def change_order_status(order_id, new_status):
 
         if order.status.id in [0, 1] and new_status == 5:
             order.status = new_status
+            order.worker.status = 1
             return 'status successfully changed to canceled by user', 200
 
         return 'bad status', 400
@@ -129,6 +130,13 @@ def change_order_status(order_id, new_status):
         if (order.status.id == 0 and new_status in [1, 4]) or (order.status.id == 1 and new_status in [2, 4]) \
                 or (order.status.id == 2 and new_status == 3):
             order.status = new_status
+
+            if new_status in [1, 2]:
+                order.worker.status = 2
+
+            if new_status in [3, 4]:
+                order.worker.status = 1
+
             if new_status == 3:
                 worker_location = Workers_last_location.get(worker=user)
                 order.final_lat = worker_location.latitude
@@ -153,18 +161,7 @@ def get_order_status(order_id):
 
     api_key = request.headers['api_key']
 
-    user = Clients.get(api_key=api_key)
-    if user is not None:
-        if order.client != user:
-            return 'Bad user', 400
-
-        return jsonify(order.status.to_dict()), 200
-
-    user = Workers.get(api_key=api_key)
-    if user is not None:
-        if order.worker != user:
-            return 'Bad worker', 400
-
+    if Clients.exists(api_key=api_key) or Workers.exists(api_key=api_key):
         return jsonify(order.status.to_dict()), 200
 
     return 'Refused! wrong api_key', 401
