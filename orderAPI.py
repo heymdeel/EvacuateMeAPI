@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models import *
 from google_maps import make_request_to_google, get_distance, get_duration
-from datetime import datetime
+from datetime import datetime, timedelta
 
 order_api = Blueprint('order_api', __name__)
 
@@ -129,6 +129,11 @@ def change_order_status(order_id, new_status):
         if (order.status.id == 0 and new_status in [1, 4]) or (order.status.id == 1 and new_status in [2, 4]) \
                 or (order.status.id == 2 and new_status == 3):
             order.status = new_status
+            if new_status == 3:
+                worker_location = Workers_last_location.get(worker=user)
+                order.final_lat = worker_location.latitude
+                order.final_long = worker_location.longitude
+                order.termination_time = datetime.now()
             return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
 
         return 'bad status', 400
@@ -163,3 +168,34 @@ def get_order_status(order_id):
         return jsonify(order.status.to_dict()), 200
 
     return 'Refused! wrong api_key', 401
+
+
+@order_api.route('/api/orders/<int:order_id>/rate/<int:rate>', methods=['PUT'])
+@db_session
+def rate_order(order_id, rate):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    api_key = request.headers['api_key']
+
+    client = Clients.get(api_key=api_key)
+    if client is None:
+        return 'wrong api_key', 401
+
+    order = Orders.get(id=order_id)
+    if order is None:
+        return 'there is no order with such id', 404
+
+    if rate < 1 or rate > 5:
+        return 'bad rate', 400
+
+    if order.client != client:
+        return 'bad user', 401
+
+    if order.status.id != 3 or datetime.now() - timedelta(minutes=10) > order.termination_time:
+        return '', 400
+
+    order.worker.company.sum_rate += rate
+    order.worker.company.count_rate += 1
+
+    return 'company was successfully rated', 200
