@@ -31,21 +31,18 @@ def get_code(phone):
     if not validate_phone(phone):
         return 'Bad phone format', 400
 
-    if Clients.exists(phone=phone) or Workers.exists(phone=phone):
-        code = random.randint(1000, 9999)
-        r = create_code_response(phone, code)
-        urls = [r]
-        rs = (grequests.post(u) for u in urls)
+    code = random.randint(1000, 9999)
+    r = create_code_response(phone, code)
+    urls = [r]
+    rs = (grequests.post(u) for u in urls)
 
-        if SMS_codes.exists(phone=phone):
-            SMS_codes.get(phone=phone).set(code=code, time_stamp=datetime.now())
-        else:
-            SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
+    if SMS_codes.exists(phone=phone):
+        SMS_codes.get(phone=phone).set(code=code, time_stamp=datetime.now())
+    else:
+        SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
 
-        #grequests.map(rs)
-        return 'ok', 200
-
-    return 'user was not found', 404
+    #grequests.map(rs)
+    return 'ok', 200
 
 
 @login_api.route('/api/clients', methods=['POST']) #register new user

@@ -113,7 +113,7 @@ def change_order_status(order_id, new_status):
     user = Clients.get(api_key=api_key)
     if user is not None:
         if order.client != user:
-            return 'Bad user', 400
+            return 'access refused for this client', 401
 
         if order.status.id in [0, 1] and new_status == 5:
             order.status = new_status
@@ -124,7 +124,7 @@ def change_order_status(order_id, new_status):
     user = Workers.get(api_key=api_key)
     if user is not None:
         if order.worker != user:
-            return 'Bad worker', 400
+            return 'access refused for this worker', 401
 
         if (order.status.id == 0 and new_status in [1, 4]) or (order.status.id == 1 and new_status in [2, 4]) \
                 or (order.status.id == 2 and new_status == 3):
@@ -141,7 +141,7 @@ def change_order_status(order_id, new_status):
     return 'Refused! wrong api_key', 401
 
 
-@order_api.route('/api/orders/<int:order_id>/status')
+@order_api.route('/api/orders/<int:order_id>/status') #check order status
 @db_session
 def get_order_status(order_id):
     if 'api_key' not in request.headers:
@@ -170,7 +170,7 @@ def get_order_status(order_id):
     return 'Refused! wrong api_key', 401
 
 
-@order_api.route('/api/orders/<int:order_id>/rate/<int:rate>', methods=['PUT'])
+@order_api.route('/api/orders/<int:order_id>/rate/<int:rate>', methods=['PUT']) #rate order
 @db_session
 def rate_order(order_id, rate):
     if 'api_key' not in request.headers:
