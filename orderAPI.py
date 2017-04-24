@@ -143,6 +143,10 @@ def change_order_status(order_id, new_status):
                 order.final_lat = worker_location.latitude
                 order.final_long = worker_location.longitude
                 order.termination_time = datetime.now()
+                result = make_request_to_google(order.start_client_lat, order.start_client_long, order.final_lat,
+                                                order.final_long)
+                distance = get_distance(result)
+                order.summary = distance * order.worker.company.tariff
             return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
 
         return 'bad status', 400
