@@ -34,6 +34,7 @@ def list_of_companies():
                 if distance < c['closest_distance']:
                     c['closest_distance'] = distance
                     c['closest_duration'] = duration
+                    c['closest_worker_id'] = worker.id
                 company_in_list = True
                 break
 
