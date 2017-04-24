@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models import *
 from google_maps import make_request_to_google, get_distance, get_duration
-from datetime import datetime
+from datetime import datetime, timedelta
 
 order_api = Blueprint('order_api', __name__)
 
@@ -34,6 +34,7 @@ def list_of_companies():
                 if distance < c['closest_distance']:
                     c['closest_distance'] = distance
                     c['closest_duration'] = duration
+                    c['closest_worker_id'] = worker.id
                 company_in_list = True
                 break
 
@@ -51,7 +52,7 @@ def list_of_companies():
             companies.append(company)
 
     if not companies:
-        return '', 404
+        return 'Can\'t find matching companies', 404
 
     companies.sort(key=lambda x: x['closest_distance'])
     return jsonify(companies), 200
@@ -76,7 +77,7 @@ def create_order():
     commentary = req_json['commentary']
 
     if worker not in company.workers:
-        return '', 400
+        return 'Bad worker id', 400
 
     if worker.status.id != 1:
         return 'worker is busy', 404
@@ -113,10 +114,11 @@ def change_order_status(order_id, new_status):
     user = Clients.get(api_key=api_key)
     if user is not None:
         if order.client != user:
-            return 'Bad user', 400
+            return 'access refused for this client', 401
 
         if order.status.id in [0, 1] and new_status == 5:
             order.status = new_status
+            order.worker.status = 1
             return 'status successfully changed to canceled by user', 200
 
         return 'bad status', 400
@@ -124,11 +126,23 @@ def change_order_status(order_id, new_status):
     user = Workers.get(api_key=api_key)
     if user is not None:
         if order.worker != user:
-            return 'Bad worker', 400
+            return 'access refused for this worker', 401
 
         if (order.status.id == 0 and new_status in [1, 4]) or (order.status.id == 1 and new_status in [2, 4]) \
                 or (order.status.id == 2 and new_status == 3):
             order.status = new_status
+
+            if new_status in [1, 2]:
+                order.worker.status = 2
+
+            if new_status in [3, 4]:
+                order.worker.status = 1
+
+            if new_status == 3:
+                worker_location = Workers_last_location.get(worker=user)
+                order.final_lat = worker_location.latitude
+                order.final_long = worker_location.longitude
+                order.termination_time = datetime.now()
             return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
 
         return 'bad status', 400
@@ -136,7 +150,7 @@ def change_order_status(order_id, new_status):
     return 'Refused! wrong api_key', 401
 
 
-@order_api.route('/api/orders/<int:order_id>/status')
+@order_api.route('/api/orders/<int:order_id>/status') #check order status
 @db_session
 def get_order_status(order_id):
     if 'api_key' not in request.headers:
@@ -148,18 +162,38 @@ def get_order_status(order_id):
 
     api_key = request.headers['api_key']
 
-    user = Clients.get(api_key=api_key)
-    if user is not None:
-        if order.client != user:
-            return 'Bad user', 400
-
-        return jsonify(order.status.to_dict()), 200
-
-    user = Workers.get(api_key=api_key)
-    if user is not None:
-        if order.worker != user:
-            return 'Bad worker', 400
-
+    if Clients.exists(api_key=api_key) or Workers.exists(api_key=api_key):
         return jsonify(order.status.to_dict()), 200
 
     return 'Refused! wrong api_key', 401
+
+
+@order_api.route('/api/orders/<int:order_id>/rate/<int:rate>', methods=['PUT']) #rate order
+@db_session
+def rate_order(order_id, rate):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    api_key = request.headers['api_key']
+
+    client = Clients.get(api_key=api_key)
+    if client is None:
+        return 'wrong api_key', 401
+
+    order = Orders.get(id=order_id)
+    if order is None:
+        return 'there is no order with such id', 404
+
+    if rate < 1 or rate > 5:
+        return 'bad rate', 400
+
+    if order.client != client:
+        return 'bad user', 401
+
+    if order.status.id != 3 or datetime.now() - timedelta(minutes=10) > order.termination_time:
+        return '', 400
+
+    order.worker.company.sum_rate += rate
+    order.worker.company.count_rate += 1
+
+    return 'company was successfully rated', 200
