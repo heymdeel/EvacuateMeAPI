@@ -201,3 +201,39 @@ def rate_order(order_id, rate):
     order.worker.company.count_rate += 1
 
     return 'company was successfully rated', 200
+
+
+@order_api.route('/api/orders/<int:order_id>/info') #get info after completing order
+@db_session
+def get_order_info(order_id):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    api_key = request.headers['api_key']
+    if not Clients.exists(lambda c: c.api_key == api_key) and not Workers.exists(lambda w: w.api_key == api_key):
+        return 'Access refused! api_key is wrong', 401
+
+    order = Orders.get(id=order_id)
+    if order is None:
+        return 'there is no order with such id', 404
+
+    user = Clients.get(api_key=api_key)
+    if user is not None and order.client != user:
+        return 'Access refused! bad user', 401
+
+    user = Workers.get(api_key=api_key)
+    if user is not None and order.worker != user:
+        return 'Access refused! bad worker', 401
+
+    if order.status.id != 3:
+        return 'Order must be completed', 400
+
+    response = {}
+    result = make_request_to_google(order.start_client_lat, order.start_client_long, order.final_lat,
+                                    order.final_long)
+    response['distance'] = get_distance(result)
+    response['summary'] = order.summary
+    response['company'] = order.worker.company.name
+    response['worker'] = order.worker.name
+
+    return jsonify(response), 200

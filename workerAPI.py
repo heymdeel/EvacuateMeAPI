@@ -83,6 +83,34 @@ def send_location():
     return 'Location was successfully saved', 200
 
 
+@worker_api.route('/api/workers/<int:worker_id>/location') #get worker's current location
+@db_session
+def get_worker_location(worker_id):
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    api_key = request.headers['api_key']
+    if not Clients.exists(lambda c: c.api_key == api_key):
+        return 'Access refused! api_key is wrong', 401
+
+    worker = Workers.get(id=worker_id)
+    if worker is None:
+        return 'worker was not found', 404
+
+    if worker.status.id == 0:
+        return 'Worker is offline', 400
+
+    worker_location = Workers_last_location.get(worker=worker)
+    if worker_location is None:
+        return '', 404
+
+    response = {}
+    response['latitude'] = worker_location.latitude
+    response['longitude'] = worker_location.longitude
+
+    return jsonify(response), 200
+
+
 @worker_api.route('/api/workers/<int:id>/location/history') #get worker's location history
 @db_session
 def get_location_history(id):
