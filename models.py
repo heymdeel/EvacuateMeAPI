@@ -80,8 +80,10 @@ class Orders(db.Entity):
     termination_time = Optional(datetime)
     final_lat = Optional(float)
     final_long = Optional(float)
-    commentary = Optional(str, 50)
+    commentary = Optional(str, 150)
     summary = Optional(float)
+    distance = Optional(float)
+    rate = Optional(int)
     status = Required('Orders_status')
     car_type = Required('Car_type')
 
