@@ -234,7 +234,7 @@ def get_order_info(order_id):
     response['distance'] = get_distance(result)
     response['summary'] = order.summary
     response['company'] = order.worker.company.name
-    response['oder_id'] = order.id
+    response['order_id'] = order.id
 
     return jsonify(response), 200
 
