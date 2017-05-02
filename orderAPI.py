@@ -263,6 +263,7 @@ def get_order_history():
             response['summary'] = order.summary
             response['car_type'] = order.car_type.name
             response['rate'] = order.rate
+            response['order_id'] = order.id
 
             orders.append(response)
 
@@ -280,6 +281,7 @@ def get_order_history():
             response['summary'] = order.summary
             response['car_type'] = order.car_type.name
             response['rate'] = order.rate
+            response['order_id'] = order.id
 
             orders.append(response)
 
