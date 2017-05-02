@@ -237,3 +237,34 @@ def get_order_info(order_id):
     response['order_id'] = order.id
 
     return jsonify(response), 200
+
+
+@order_api.route('/api/orders/history') #get order history
+@db_session
+def get_order_history():
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    api_key = request.headers['api_key']
+
+    orders = []
+    user = Clients.get(api_key=api_key)
+    if user is not None:
+        for order in select(ord for ord in Orders if ord.client == user):
+            json_order = order.to_dict()
+            orders.append(json_order)
+
+        return jsonify(orders), 200
+
+    user = Workers.get(api_key=api_key)
+    if user is not None:
+        for order in select(ord for ord in Orders if ord.worker == user):
+            json_order = order.to_dict()
+            orders.append(json_order)
+
+        return jsonify(orders), 200
+
+    if not orders:
+        return '', 404
+
+    return 'Refused! wrong api_key', 401
