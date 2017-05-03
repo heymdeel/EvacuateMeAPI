@@ -146,6 +146,7 @@ def change_order_status(order_id, new_status):
                 result = make_request_to_google(order.start_client_lat, order.start_client_long, order.final_lat,
                                                 order.final_long)
                 distance = get_distance(result)
+                order.distance = distance
                 order.summary = (distance * user.company.tariff) / 1000 + user.company.min_sum
             return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
 
@@ -194,11 +195,15 @@ def rate_order(order_id, rate):
     if order.client != client:
         return 'bad user', 401
 
+    if order.rate != 0:
+        return 'order is already rated', 400
+
     if order.status.id != 3 or datetime.now() - timedelta(minutes=10) > order.termination_time:
         return '', 400
 
     order.worker.company.sum_rate += rate
     order.worker.company.count_rate += 1
+    order.rate = rate
 
     return 'company was successfully rated', 200
 
@@ -229,9 +234,7 @@ def get_order_info(order_id):
         return 'Order must be completed', 400
 
     response = {}
-    result = make_request_to_google(order.start_client_lat, order.start_client_long, order.final_lat,
-                                    order.final_long)
-    response['distance'] = get_distance(result)
+    response['distance'] = order.distance
     response['summary'] = order.summary
     response['company'] = order.worker.company.name
     response['order_id'] = order.id
@@ -251,16 +254,36 @@ def get_order_history():
     user = Clients.get(api_key=api_key)
     if user is not None:
         for order in select(ord for ord in Orders if ord.client == user):
-            json_order = order.to_dict()
-            orders.append(json_order)
+            company = order.worker.company
+            response = {}
+            response['company'] = company.name
+            response['contact_phone'] = company.contact_phone
+            response['time'] = order.termination_time - order.beginning_time
+            response['distance'] = order.distance
+            response['summary'] = order.summary
+            response['car_type'] = order.car_type.name
+            response['rate'] = order.rate
+            response['order_id'] = order.id
+
+            orders.append(response)
 
         return jsonify(orders), 200
 
     user = Workers.get(api_key=api_key)
     if user is not None:
         for order in select(ord for ord in Orders if ord.worker == user):
-            json_order = order.to_dict()
-            orders.append(json_order)
+            company = order.worker.company
+            response = {}
+            response['company'] = company.name
+            response['contact_phone'] = company.contact_phone
+            response['time'] = order.termination_time - order.beginning_time
+            response['distance'] = order.distance
+            response['summary'] = order.summary
+            response['car_type'] = order.car_type.name
+            response['rate'] = order.rate
+            response['order_id'] = order.id
+
+            orders.append(response)
 
         return jsonify(orders), 200
 
