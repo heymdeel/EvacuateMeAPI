@@ -258,7 +258,9 @@ def get_order_history():
             response = {}
             response['company'] = company.name
             response['contact_phone'] = company.contact_phone
-            response['time'] = order.termination_time - order.beginning_time
+            response['beginning_time'] = order.beginning_time
+            response['termination_time'] = order.termination_time
+            response['duration'] = order.termination_time - order.beginning_time
             response['distance'] = order.distance
             response['summary'] = order.summary
             response['car_type'] = order.car_type.name
