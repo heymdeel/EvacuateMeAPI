@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from models import *
 from datetime import datetime
+from google_maps import make_request_to_google, get_distance
 
 worker_api = Blueprint('worker_api', __name__)
 
@@ -47,7 +48,9 @@ def check_for_orders():
     client_info['order_id'] = order.id
     client_info['car_model'] = order.car_model
     client_info['car_colour'] = order.car_colour
-    client_info['distance'] = order.distance
+    result = make_request_to_google(order.start_client_lat, order.start_client_long, order.start_worker_lat,
+                                    order.start_worker_long)
+    client_info['distance'] = get_distance(result)
 
     return jsonify(client_info), 200
 
