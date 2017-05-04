@@ -137,6 +137,10 @@ def change_order_status(order_id, new_status):
                 order.worker.status = 2
 
             if new_status in [3, 4]:
+                if new_status == 4:
+                    user.company.sum_rate += 1
+                    user.company.count_rate += 1
+                    order.rate = 1
                 order.worker.status = 1
 
             if new_status == 3:
