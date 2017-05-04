@@ -45,7 +45,9 @@ def check_for_orders():
     client_info['longitude'] = order.start_client_long
     client_info['phone'] = order.client.phone
     client_info['order_id'] = order.id
-    client_info['commentary'] = order.commentary
+    client_info['car_model'] = order.car_model
+    client_info['car_colour'] = order.car_colour
+    client_info['distance'] = order.distance
 
     return jsonify(client_info), 200
 

@@ -74,7 +74,8 @@ def create_order():
     client_car_type = req_json['car_type']
     company = Companies.get(id=req_json['company_id'])
     worker = Workers.get(id=req_json['worker_id'])
-    commentary = req_json['commentary']
+    car_model = req_json['car_nodel']
+    car_colour = req_json['car_colour']
 
     if worker not in company.workers:
         return 'Bad worker id', 400
@@ -86,7 +87,7 @@ def create_order():
     order = Orders(client=Clients.get(api_key=api_key), worker=worker, start_client_lat=client_lat,
                    start_client_long=client_long, start_worker_lat=worker_location.latitude,
                    start_worker_long=worker_location.longitude, beginning_time=datetime.now(),
-                   car_type=client_car_type, status=0, commentary=commentary)
+                   car_type=client_car_type, status=0, car_model=car_model, car_colour=car_colour)
     commit()
 
     response = {}
