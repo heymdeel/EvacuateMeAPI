@@ -259,7 +259,9 @@ def get_order_history():
             response = {}
             response['company'] = company.name
             response['contact_phone'] = company.contact_phone
-            response['time'] = order.termination_time - order.beginning_time
+            response['beginning_time'] = order.beginning_time
+            response['termination_time'] = order.termination_time
+            #response['duration'] = order.termination_time - order.beginning_time
             response['distance'] = order.distance
             response['summary'] = order.summary
             response['car_type'] = order.car_type.name
@@ -273,11 +275,10 @@ def get_order_history():
     user = Workers.get(api_key=api_key)
     if user is not None:
         for order in select(ord for ord in Orders if ord.worker == user):
-            company = order.worker.company
             response = {}
-            response['company'] = company.name
-            response['contact_phone'] = company.contact_phone
-            response['time'] = order.termination_time - order.beginning_time
+            response['beginning_time'] = order.beginning_time
+            response['termination_time'] = order.termination_time
+            #response['duration'] = order.termination_time - order.beginning_time
             response['distance'] = order.distance
             response['summary'] = order.summary
             response['car_type'] = order.car_type.name
