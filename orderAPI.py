@@ -74,7 +74,7 @@ def create_order():
     client_car_type = req_json['car_type']
     company = Companies.get(id=req_json['company_id'])
     worker = Workers.get(id=req_json['worker_id'])
-    car_model = req_json['car_nodel']
+    car_model = req_json['car_model']
     car_colour = req_json['car_colour']
 
     if worker not in company.workers:
