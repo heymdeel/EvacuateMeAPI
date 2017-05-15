@@ -14,6 +14,8 @@ class Clients(db.Entity):
     name = Required(str, 15)
     phone = Required(str, 11, unique=True)
     api_key = Required(str, unique=True)
+    car_model = Optional(str, 50)
+    car_colour = Optional(str, 50)
     orders = Set('Orders')
 
 

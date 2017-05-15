@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from models import *
 import grequests
 import random
@@ -58,7 +58,7 @@ def clients_sign_up():
 
     if SMS_codes.exists(lambda s: s.phone == req['phone'] and s.code == req['code']):
         new_key = renew_code(req['phone'], req['code'])
-        Clients(name=req['name'], phone=req['phone'], api_key=new_key)
+        Clients(name=req['name'], phone=req['phone'], car_model=req['car_model'], car_colour=req['car_colour'], api_key=new_key)
         return new_key, 201
 
     return 'Sms time was out or code is invalid', 404
@@ -76,11 +76,38 @@ def clients_sign_in():
 
         if SMS_codes.exists(lambda s: s.phone == phone and s.code == code):
             new_key = renew_code(phone, code)
-            Clients.get(phone=phone).api_key = new_key
-            return new_key, 200
+            client = Clients.get(phone=phone)
+            if client is not None:
+                client.api_key = new_key
+                response = {}
+                response['api_key'] = new_key
+                response['car_model'] = client.car_model
+                response['car_colour'] = client.car_colour
+                return jsonify(response), 200
         return 'Sms time was out or code is invalid', 404
 
     return 'Missing phone or sms-code', 400
+
+
+@login_api.route('/api/clients/car', methods=['PUT']) #change car colour and model
+@db_session
+def client_change_car():
+    if 'api_key' not in request.headers:
+        return 'Access refused! Need authorization via api_key', 401
+
+    api_key = request.headers['api_key']
+    client = Clients.get(api_key=api_key)
+    if client is None:
+        return 'Access refused! api_key is wrong', 401
+
+    req_json = request.get_json()
+    if 'car_model' not in req_json or 'car_colour' not in req_json:
+        return '', 400
+
+    client.car_model = req_json['car_model']
+    client.car_colour = req_json['car_colour']
+
+    return '', 200
 
 
 #======================================|COMPANY|=======================================================================
