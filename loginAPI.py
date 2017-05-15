@@ -58,7 +58,10 @@ def clients_sign_up():
 
     if SMS_codes.exists(lambda s: s.phone == req['phone'] and s.code == req['code']):
         new_key = renew_code(req['phone'], req['code'])
-        Clients(name=req['name'], phone=req['phone'], car_model=req['car_model'], car_colour=req['car_colour'], api_key=new_key)
+        if 'car_model' in req and 'car_colour' in req:
+            Clients(name=req['name'], phone=req['phone'], car_model=req['car_model'], car_colour=req['car_colour'], api_key=new_key)
+        else:
+            Clients(name=req['name'], phone=req['phone'], api_key=new_key)
         return new_key, 201
 
     return 'Sms time was out or code is invalid', 404
