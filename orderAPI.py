@@ -122,6 +122,19 @@ def change_order_status(order_id, new_status):
             order.worker.status = 1
             return 'status successfully changed to canceled by user', 200
 
+        if order.status.id == 2 and new_status == 3:
+            order.status = new_status
+            worker_location = Workers_last_location.get(worker=user)
+            order.final_lat = worker_location.latitude
+            order.final_long = worker_location.longitude
+            order.termination_time = datetime.now()
+            result = make_request_to_google(order.start_client_lat, order.start_client_long, order.final_lat,
+                                            order.final_long)
+            distance = get_distance(result)
+            order.distance = distance
+            order.summary = (distance * user.company.tariff) / 1000 + user.company.min_sum
+        return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
+
         return 'bad status', 400
 
     user = Workers.get(api_key=api_key)
