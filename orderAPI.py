@@ -132,7 +132,7 @@ def change_order_status(order_id, new_status):
                                             order.final_long)
             distance = get_distance(result)
             order.distance = distance
-            order.summary = (distance * user.company.tariff) / 1000 + user.company.min_sum
+            order.summary = (distance * order.worker.company.tariff) / 1000 + order.worker.company.min_sum
         return 'status successfully changed to ' + Orders_status.get(id=new_status).description, 200
 
         return 'bad status', 400
