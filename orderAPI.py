@@ -124,7 +124,7 @@ def change_order_status(order_id, new_status):
 
         if order.status.id == 2 and new_status == 3:
             order.status = new_status
-            worker_location = Workers_last_location.get(worker=user)
+            worker_location = Workers_last_location.get(worker=order.worker)
             order.final_lat = worker_location.latitude
             order.final_long = worker_location.longitude
             order.termination_time = datetime.now()
