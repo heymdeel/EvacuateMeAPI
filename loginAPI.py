@@ -41,7 +41,7 @@ def get_code(phone):
     else:
         SMS_codes(phone=phone, code=code, time_stamp=datetime.now())
 
-    #grequests.map(rs)
+    grequests.map(rs)
     return 'ok', 200
 
 
